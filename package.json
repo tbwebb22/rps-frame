@@ -11,12 +11,10 @@
     "devtools": "npx frog"
   },
   "dependencies": {
-    "@airstack/frog": "^0.0.7",
-    "@resvg/resvg-js": "^2.6.0",
+    "@airstack/frog": "^0.0.17",
     "next": "14.1.0",
     "react": "^18",
-    "react-dom": "^18",
-    "sharp": "^0.33.2"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 /** @jsxImportSource @airstack/frog/jsx */
 import { Button, Frog } from "@airstack/frog";
 import { handle } from "@airstack/frog/next";
