@@ -140,9 +140,9 @@ export const homeFrame = (gameId: string) => {
   };
 };
 
-export const selectPlay = (gameId: string, profileName: string) => {
+export const selectPlay = (gameId: string, matchId: string, profileName: string) => {
     return {
-      action: `/game/${gameId}/played`,
+      action: `/game/${gameId}/${matchId}/played`,
       image: (
         <div
           style={{
@@ -165,10 +165,36 @@ export const selectPlay = (gameId: string, profileName: string) => {
         </div>
       ),
       intents: [
-        <Button value="rock">rock</Button>,
-        <Button value="pepe">pepe</Button>,
-        <Button value="slizards">slizards</Button>,
+        <Button value="Rock">rock</Button>,
+        <Button value="Pepe">pepe</Button>,
+        <Button value="Slizards">slizards</Button>,
       ],
+    };
+  };
+
+  export const played = (gameId: string, playerMove: string) => {
+    return {
+      action: `/game/${gameId}/played`,
+      image: (
+        <div
+          style={{
+            backgroundColor: "#2f0040",
+            color: "#e59eff",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+            padding: "20px",
+            boxSizing: "border-box",
+            textAlign: "center",
+            fontSize: 30,
+          }}
+        >
+          <div>{`You played ${playerMove}!`}</div>
+        </div>
+      )
     };
   };
   
@@ -302,7 +328,7 @@ export const selectPlay = (gameId: string, profileName: string) => {
     };
   };
     
-  export const prePlay = () => {
+  export const roundOne = (gameId: string) => {
     return {
       action: `/game/:gameId/selectplay`,
       image: (
@@ -322,7 +348,34 @@ export const selectPlay = (gameId: string, profileName: string) => {
             fontSize: 30,
           }}
         >
-          <div>{`Welcome to round 1 of game #6!`}</div>
+          <div>{`Welcome to round one of game ${gameId}!`}</div>
+        </div>
+      ),
+      intents: [<Button value="play">play</Button>],
+    };
+  };
+
+  export const wonLastRound = (gameId: string, matchId: string, playerMove: number) => {
+    return {
+      action: `/game/${gameId}/${matchId}/selectplay`,
+      image: (
+        <div
+          style={{
+            backgroundColor: "#2f0040",
+            color: "#e59eff",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+            padding: "20px",
+            boxSizing: "border-box",
+            textAlign: "center",
+            fontSize: 30,
+          }}
+        >
+          <div>{`You won last round by playing ${playerMove}!`}</div>
         </div>
       ),
       intents: [<Button value="play">play</Button>],

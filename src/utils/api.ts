@@ -30,11 +30,53 @@ export async function fetchUserData(fid: number) {
   return data;
 }
 
-export const getUsersLastMatch = (gameData: GameData) => {
-  for (let i = gameData.rounds.length - 1; i >= 0; i--) {
-    if (gameData.rounds[i].match !== undefined) {
-      return { match: gameData.rounds[i].match, roundLost: i + 1 };
-    }
+export async function registerUserForGame(fid: number, gameId: number): Promise<any> {
+    console.log(`registering user for game ${gameId} with fid ${fid}`);
+  const response = await fetch('http://localhost:3000/api/games/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ fid, gameId }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
   }
-  return undefined; // Return undefined if no match is found
+
+  return response.json();
+}
+
+export async function makePlay(matchId: number, fid: number, move: number): Promise<any> {
+console.log('body: ', JSON.stringify({ matchId, fid, move }));
+  const response = await fetch('http://localhost:3000/api/games/play', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ matchId, fid, move }),
+  });
+
+  if (!response.ok) {
+    // throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export const getUsersLastMatch = (gameData: GameData) => {
+    for (let i = gameData.rounds.length - 1; i >= 0; i--) {
+      if (gameData.rounds[i].match !== undefined) {
+        return { match: gameData.rounds[i].match, roundLost: i + 1 };
+      }
+    }
+    return undefined; // Return undefined if no match is found
+  }
+
+export const getMoveString = (move: number) => {
+  return move === 0 ? "Rock" : move === 1 ? "Pepe" : "Slizards";
+}
+
+export const getMoveNumber = (move: string) => {
+  return move === "Rock" ? 0 : move === "Pepe" ? 1 : 2;
 }

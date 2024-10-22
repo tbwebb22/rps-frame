@@ -17,7 +17,7 @@ export interface Round {
 export interface GameData {
     gameId: number;
     currentRoundId: number | null;
-    currentRoundNumber: number | null; // Add this line
+    currentRoundNumber: number | null;
     gameState: 0 | 1 | 2 | 3;
     registrationStart: string;
     gameStart: string;
@@ -25,4 +25,5 @@ export interface GameData {
     currentRegistrations: number;
     userRegistered: boolean;
     rounds: Round[];
+    winnerId: number | null;
 }

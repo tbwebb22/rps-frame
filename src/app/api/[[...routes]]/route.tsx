@@ -13,18 +13,25 @@ import {
   fetchGameData,
   fetchUserData,
   getUsersLastMatch,
+  makePlay,
+  registerUserForGame,
+  getMoveString,
+  getMoveNumber,
 } from "../../../utils/api";
 import {
   homeFrame,
   register,
-  prePlay,
+  roundOne,
   registered,
   registrationFull,
   selectPlay,
   registrationNotStarted,
   lost,
   gameOver,
+  wonLastRound,
+  played,
 } from "../../frames/frames";
+
 const app = new Frog({
   imageAspectRatio: "1:1",
   apiKey: process.env.AIRSTACK_API_KEY as string,
@@ -50,6 +57,9 @@ app.frame("/game/:gameId/play", async (c) => {
   const currentRoundNumber = gameData.rounds.find(
     (round) => round.id === gameData.currentRoundId
   )?.round_number;
+  const currentRound = gameData.rounds.find(
+    (round) => round.id === gameData.currentRoundId
+  );
 
   console.log("fid: ", fid);
   console.log("userData:", userData);
@@ -74,8 +84,15 @@ app.frame("/game/:gameId/play", async (c) => {
     }
   } else if (gameData.gameState === 2) {
     // game is active
-    if (!gameData.rounds[currentRoundNumber - 1].match) {
-      // user is not in the current round
+    console.log("currentRound: ", currentRound);
+    if (currentRound.match && currentRound.match.playerMove !== null) {
+      // player already played
+      return c.res(played(gameId, getMoveString(currentRound.match.playerMove)));
+    } else if (currentRoundNumber === 1) {
+      // round one
+      return c.res(roundOne(gameId));
+    } else if (!gameData.rounds[currentRoundNumber - 1].match) {
+      // user lost is last round or a previous round
       const lastMatchAndRound = getUsersLastMatch(gameData);
       return c.res(
         lost(
@@ -85,22 +102,32 @@ app.frame("/game/:gameId/play", async (c) => {
       );
     } else {
       // user is in the current round
-      return c.res(prePlay());
+      return c.res(
+        wonLastRound(
+          gameId,
+          currentRound.match.id.toString(),
+          currentRound.match.playerMove
+        )
+      );
     }
   } else {
     // game is over
-    return c.res(gameOver('taylorwebb.eth'));
+    return c.res(gameOver(gameData.winnerId.toString()));
   }
 });
 
 app.frame("/game/:gameId/registered", async (c) => {
   const { gameId } = c.req.param();
-  console.log("gameID: ", gameId);
+  const { frameData, verified } = c;
+  const fid = frameData?.fid;
+
+  await registerUserForGame(fid, Number(gameId));
   return c.res(registered(gameId));
 });
 
-app.frame("/game/:gameId/played", async (c) => {
-  const { gameId } = c.req.param();
+app.frame("/game/:gameId/:matchId/selectplay", async (c) => {
+  console.log("inside selectplay");
+  const { gameId, matchId } = c.req.param();
   const { frameData, verified } = c;
   const { buttonValue, status } = c;
   const fid = frameData?.fid;
@@ -118,41 +145,45 @@ app.frame("/game/:gameId/played", async (c) => {
 
   if (error) throw new Error(error);
 
-  return c.res({
-    action: `/game/${gameId}/played`,
-    image: (
-      <div
-        style={{
-          color: "red",
-          display: "flex",
-          flexDirection: "column",
-          fontSize: 60,
-        }}
-      >
-        <div>{`You played ${buttonValue}!`}</div>
-        <div>Next round starts in 3 hours!</div>
-      </div>
-    ),
-  });
+  return c.res(selectPlay(gameId, matchId, profileName));
 });
 
-// app.frame("/", (c) => {
-//   const { buttonValue, status } = c;
-//   return c.res({
-//     image: (
-//       <div style={{ color: "white", display: "flex", fontSize: 60 }}>
-//         {status === "initial"
-//           ? "Select your fruit!"
-//           : `Selected: ${buttonValue}`}
-//       </div>
-//     ),
-//     intents: [
-//       <Button value="apple">Apple</Button>,
-//       <Button value="banana">Banana</Button>,
-//       <Button value="mango">Mango</Button>,
-//     ],
-//   });
-// });
+app.frame("/game/:gameId/:matchId/played", async (c) => {
+  const { gameId, matchId } = c.req.param();
+  const { frameData, verified } = c;
+  const { buttonValue, status } = c;
+  const fid = frameData?.fid;
+
+  console.log("played buttonValue: ", buttonValue);
+
+  await makePlay(Number(matchId), fid, getMoveNumber(buttonValue));
+
+  // return c.res(played(gameId, buttonValue));
+  return c.res(
+    {
+      image: (
+        <div
+          style={{
+            backgroundColor: "#2f0040",
+            color: "#e59eff",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+            padding: "20px",
+            boxSizing: "border-box",
+            textAlign: "center",
+            fontSize: 30,
+          }}
+        >
+          <div>{`You played rock!`}</div>
+        </div>
+      )
+    }
+  );
+});
 
 devtools(app, { serveStatic });
 
