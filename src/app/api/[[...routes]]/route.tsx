@@ -9,7 +9,22 @@ import {
   FarcasterUserDetailsInput,
   FarcasterUserDetailsOutput,
 } from "@airstack/frog";
-
+import {
+  fetchGameData,
+  fetchUserData,
+  getUsersLastMatch,
+} from "../../../utils/api";
+import {
+  homeFrame,
+  register,
+  prePlay,
+  registered,
+  registrationFull,
+  selectPlay,
+  registrationNotStarted,
+  lost,
+  gameOver,
+} from "../../frames/frames";
 const app = new Frog({
   imageAspectRatio: "1:1",
   apiKey: process.env.AIRSTACK_API_KEY as string,
@@ -20,137 +35,7 @@ const app = new Frog({
 app.frame("/game/:gameId", (c) => {
   const { gameId } = c.req.param();
 
-  return c.res({
-    action: `/game/${gameId}/play`,
-    image: (
-      <div
-        style={{
-          backgroundColor: "#2f0040",
-          color: "white", // Changed text color to improve visibility
-          display: "flex",
-          flexDirection: "column",
-          // justifyContent: "center", // Center content vertically
-          alignItems: "center", // Center content horizontally
-          fontSize: 60,
-          width: "100%",
-          height: "100%",
-          boxSizing: "border-box",
-          // border: "2px solid yellow",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center", // Center items in the row
-            alignItems: "center", // Center items vertically
-            fontSize: 60,
-            // border: "2px solid red",
-            height: "50%",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#ffb19f", margin: "0 10px" }}>Rock</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/rock.svg"
-              alt="Rock"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "20px"
-                // margin: "5%"
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#bcffbb", margin: "0 10px" }}>Pepe</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/pepe.svg"
-              alt="Pepe"
-              // width="200"
-              // height="200"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "10px"
-                // margin: "5%"
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#b3c8ff", margin: "0 10px" }}>Slizards</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/slizards.svg"
-              alt="Pepe"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "40px"
-                // margin: "5%"
-              }}
-            />
-          </div>
-        </div>
-        <div style={{ fontSize: 40, marginTop: 10, color: "#e59eff" }}>
-          {`Game #${gameId}`}
-        </div>
-        <div style={{ fontSize: 40, color: "#e59eff" }}>
-          Play for free
-        </div>
-        <div style={{ fontSize: 40, color: "#e59eff" }}>
-          Win 2,000 MOXIE
-        </div>
-      </div>
-    ),
-    intents: [<Button>Play</Button>],
-  });
+  return c.res(homeFrame(gameId));
 });
 
 app.frame("/game/:gameId/play", async (c) => {
@@ -158,51 +43,60 @@ app.frame("/game/:gameId/play", async (c) => {
   const { frameData, verified } = c;
   const fid = frameData?.fid;
 
-  if (!fid) throw new Error();
+  if (!fid) throw new Error("FID not found");
 
-  const input: FarcasterUserDetailsInput = {
-    fid: fid,
-  };
+  const userData = await fetchUserData(fid);
+  const gameData = await fetchGameData(gameId, fid.toString());
+  const currentRoundNumber = gameData.rounds.find(
+    (round) => round.id === gameData.currentRoundId
+  )?.round_number;
 
   console.log("fid: ", fid);
+  console.log("userData:", userData);
+  console.log("gameData:", gameData);
+  console.log("currentRoundNumber:", currentRoundNumber);
 
-  const { data, error }: FarcasterUserDetailsOutput =
-    await getFarcasterUserDetails(input);
+  if (gameData.gameState === 0) {
+    // registration not started
+    console.log("registration not started");
+    return c.res(registrationNotStarted());
+  } else if (gameData.gameState === 1) {
+    // registration is active
+    if (gameData.currentRegistrations >= gameData.maxRegistrations) {
+      // registration is full
+      return c.res(registrationFull());
+    } else if (gameData.userRegistered) {
+      // user is already registered
+      return c.res(registered(gameId));
+    } else {
+      // user is not registered
+      return c.res(register(gameId));
+    }
+  } else if (gameData.gameState === 2) {
+    // game is active
+    if (!gameData.rounds[currentRoundNumber - 1].match) {
+      // user is not in the current round
+      const lastMatchAndRound = getUsersLastMatch(gameData);
+      return c.res(
+        lost(
+          lastMatchAndRound.roundLost,
+          lastMatchAndRound.match.opponentId.toString()
+        )
+      );
+    } else {
+      // user is in the current round
+      return c.res(prePlay());
+    }
+  } else {
+    // game is over
+    return c.res(gameOver('taylorwebb.eth'));
+  }
+});
 
-  console.log("data: ", data);
-  const profileName = data.profileName;
-
-  if (error) throw new Error(error);
-
-  return c.res({
-    action: `/game/${gameId}/played`,
-    image: (
-      <div
-        style={{
-          backgroundColor: "#2f0040",
-          color: "#e59eff",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "100%",
-          height: "100%",
-          padding: "20px",
-          boxSizing: "border-box",
-          textAlign: "center",
-          fontSize: 30,
-        }}
-      >
-        <div>{`Welcome to game #${gameId} ${profileName}!`}</div>
-        <div>Select your move!</div>
-      </div>
-    ),
-    intents: [
-      <Button value="rock">rock</Button>,
-      <Button value="pepe">pepe</Button>,
-      <Button value="slizards">slizards</Button>,
-    ],
-  });
+app.frame("/game/:gameId/registered", async (c) => {
+  const { gameId } = c.req.param();
+  console.log("gameID: ", gameId);
+  return c.res(registered(gameId));
 });
 
 app.frame("/game/:gameId/played", async (c) => {
