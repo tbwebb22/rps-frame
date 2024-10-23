@@ -58,7 +58,7 @@ console.log('body: ', JSON.stringify({ matchId, fid, move }));
   });
 
   if (!response.ok) {
-    // throw new Error(`HTTP error! status: ${response.status}`);
+    throw new Error(`HTTP error! status: ${response.status}`);
   }
 
   return response.json();
@@ -66,11 +66,12 @@ console.log('body: ', JSON.stringify({ matchId, fid, move }));
 
 export const getUsersLastMatch = (gameData: GameData) => {
     for (let i = gameData.rounds.length - 1; i >= 0; i--) {
-      if (gameData.rounds[i].match !== undefined) {
+        // console.log("i: ", i, "undefined: ", gameData.rounds[i].match !== undefined);
+      if (gameData.rounds[i].match && gameData.rounds[i].id !== gameData.currentRoundId) {
         return { match: gameData.rounds[i].match, roundLost: i + 1 };
       }
     }
-    return undefined; // Return undefined if no match is found
+    return undefined;
   }
 
 export const getMoveString = (move: number) => {

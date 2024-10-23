@@ -61,14 +61,14 @@ app.frame("/game/:gameId/play", async (c) => {
     (round) => round.id === gameData.currentRoundId
   );
 
-  console.log("fid: ", fid);
-  console.log("userData:", userData);
-  console.log("gameData:", gameData);
-  console.log("currentRoundNumber:", currentRoundNumber);
+  // console.log("fid: ", fid);
+  // console.log("userData:", userData);
+  // console.log("gameData:", gameData);
+  // console.log("currentRoundNumber:", currentRoundNumber);
+  console.log("rounds: ", gameData.rounds);
 
   if (gameData.gameState === 0) {
     // registration not started
-    console.log("registration not started");
     return c.res(registrationNotStarted());
   } else if (gameData.gameState === 1) {
     // registration is active
@@ -80,20 +80,36 @@ app.frame("/game/:gameId/play", async (c) => {
       return c.res(registered(gameId));
     } else {
       // user is not registered
-      return c.res(register(gameId));
+      return c.res(register(gameId, fid.toString()));
     }
   } else if (gameData.gameState === 2) {
     // game is active
-    console.log("currentRound: ", currentRound);
+    console.log("gamestate: 2");
     if (currentRound.match && currentRound.match.playerMove !== null) {
       // player already played
-      return c.res(played(gameId, getMoveString(currentRound.match.playerMove)));
+      console.log("a");
+      return c.res(
+        played(gameId, getMoveString(currentRound.match.playerMove))
+      );
+      // TODO: add case for no opponent
     } else if (currentRoundNumber === 1) {
       // round one
-      return c.res(roundOne(gameId));
+      console.log("b");
+      return c.res(
+        roundOne(
+          gameId,
+          currentRound.match.id.toString(),
+          fid.toString(),
+          currentRound.match.opponentId
+            ? currentRound.match.opponentId.toString()
+            : null
+        )
+      );
     } else if (!gameData.rounds[currentRoundNumber - 1].match) {
-      // user lost is last round or a previous round
+      // user lost in last round or a previous round
+      console.log("c");
       const lastMatchAndRound = getUsersLastMatch(gameData);
+      console.log("lastMatchAndRound: ", lastMatchAndRound);
       return c.res(
         lost(
           lastMatchAndRound.roundLost,
@@ -102,11 +118,15 @@ app.frame("/game/:gameId/play", async (c) => {
       );
     } else {
       // user is in the current round
+      console.log("d");
+      console.log("currentRound: ", currentRound);
+      const lastMatch = getUsersLastMatch(gameData);
+      console.log("lastMatch: ", lastMatch);
       return c.res(
         wonLastRound(
           gameId,
           currentRound.match.id.toString(),
-          currentRound.match.playerMove
+          lastMatch.match.playerMove
         )
       );
     }
@@ -158,31 +178,7 @@ app.frame("/game/:gameId/:matchId/played", async (c) => {
 
   await makePlay(Number(matchId), fid, getMoveNumber(buttonValue));
 
-  // return c.res(played(gameId, buttonValue));
-  return c.res(
-    {
-      image: (
-        <div
-          style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-            fontSize: 30,
-          }}
-        >
-          <div>{`You played rock!`}</div>
-        </div>
-      )
-    }
-  );
+  return c.res(played(gameId, buttonValue));
 });
 
 devtools(app, { serveStatic });

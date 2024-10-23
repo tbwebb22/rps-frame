@@ -140,296 +140,307 @@ export const homeFrame = (gameId: string) => {
   };
 };
 
-export const selectPlay = (gameId: string, matchId: string, profileName: string) => {
-    return {
-      action: `/game/${gameId}/${matchId}/played`,
-      image: (
-        <div
-          style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-            fontSize: 30,
-          }}
-        >
-          <div>{`Welcome to game #${gameId} ${profileName}!`}</div>
-          <div>Select your move!</div>
-        </div>
-      ),
-      intents: [
-        <Button value="Rock">rock</Button>,
-        <Button value="Pepe">pepe</Button>,
-        <Button value="Slizards">slizards</Button>,
-      ],
-    };
+export const selectPlay = (
+  gameId: string,
+  matchId: string,
+  profileName: string
+) => {
+  return {
+    action: `/game/${gameId}/${matchId}/played`,
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "#e59eff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+          boxSizing: "border-box",
+          textAlign: "center",
+          fontSize: 30,
+        }}
+      >
+        <div>Select your move!</div>
+      </div>
+    ),
+    intents: [
+      <Button value="Rock">rock</Button>,
+      <Button value="Pepe">pepe</Button>,
+      <Button value="Slizards">slizards</Button>,
+    ],
   };
+};
 
-  export const played = (gameId: string, playerMove: string) => {
-    return {
-      action: `/game/${gameId}/played`,
-      image: (
-        <div
-          style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-            fontSize: 30,
-          }}
-        >
-          <div>{`You played ${playerMove}!`}</div>
-        </div>
-      )
-    };
+export const played = (gameId: string, playerMove: string) => {
+  return {
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "#e59eff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+          boxSizing: "border-box",
+          textAlign: "center",
+          fontSize: 30,
+        }}
+      >
+        <div>{`You played ${playerMove}!`}</div>
+      </div>
+    ),
   };
-  
-  export const registrationNotStarted = () => {
-    return {
-      image: (
-        <div
-          style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "30px",
-              lineHeight: 1.2,
-              wordBreak: "break-word",
-              whiteSpace: "pre-wrap",
-              maxWidth: "100%",
-            }}
-          >
-            {`Registration is has not begun yet! Check back soon`}
-          </div>
-        </div>
-      ),
-    };
-  };
+};
 
-  export const registrationFull = () => {
-    return {
-      image: (
+export const registrationNotStarted = () => {
+  return {
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "#e59eff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+          boxSizing: "border-box",
+          textAlign: "center",
+        }}
+      >
         <div
           style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
+            fontSize: "30px",
+            lineHeight: 1.2,
+            wordBreak: "break-word",
+            whiteSpace: "pre-wrap",
+            maxWidth: "100%",
           }}
         >
-          <div
-            style={{
-              fontSize: "30px",
-              lineHeight: 1.2,
-              wordBreak: "break-word",
-              whiteSpace: "pre-wrap",
-              maxWidth: "100%",
-            }}
-          >
-            {`Registration is full!\nCheck back soon for the next game!`}
-          </div>
+          {`Registration is has not begun yet! Check back soon`}
         </div>
-      ),
-    };
+      </div>
+    ),
   };
+};
 
-  export const register = (gameId: string) => {
-    return {
-      action: `/game/${gameId}/registered`,
-      image: (
+export const registrationFull = () => {
+  return {
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "#e59eff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+          boxSizing: "border-box",
+          textAlign: "center",
+        }}
+      >
         <div
           style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-            fontSize: 30,
+            fontSize: "30px",
+            lineHeight: 1.2,
+            wordBreak: "break-word",
+            whiteSpace: "pre-wrap",
+            maxWidth: "100%",
           }}
         >
-          <div>{`Register for game #6 below!`}</div>
+          {`Registration is full!\nCheck back soon for the next game!`}
         </div>
-      ),
-      intents: [<Button value="register">register</Button>],
-    };
+      </div>
+    ),
   };
+};
 
-  export const registered = (gameId: string) => {
-    console.log("gameId: ", gameId);
-    return {
-      image: (
-        <div
-          style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "30px",
-              lineHeight: 1.2,
-              wordBreak: "break-word",
-              whiteSpace: "pre-wrap",
-              maxWidth: "100%",
-            }}
-          >
-            {`You're registered for game #${gameId}!`}
-          </div>
-        </div>
-      ),
-    };
+export const register = (gameId: string, userName: string) => {
+  return {
+    action: `/game/${gameId}/registered`,
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "#e59eff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+          boxSizing: "border-box",
+          textAlign: "center",
+          fontSize: 30,
+        }}
+      >
+        <div>{`Welcome ${userName}!`}</div>
+        <div>{`Register for game #${gameId} below`}</div>
+      </div>
+    ),
+    intents: [<Button value="register">register</Button>],
   };
-    
-  export const roundOne = (gameId: string) => {
-    return {
-      action: `/game/:gameId/selectplay`,
-      image: (
-        <div
-          style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-            fontSize: 30,
-          }}
-        >
-          <div>{`Welcome to round one of game ${gameId}!`}</div>
-        </div>
-      ),
-      intents: [<Button value="play">play</Button>],
-    };
-  };
+};
 
-  export const wonLastRound = (gameId: string, matchId: string, playerMove: number) => {
-    return {
-      action: `/game/${gameId}/${matchId}/selectplay`,
-      image: (
+export const registered = (gameId: string) => {
+  console.log("gameId: ", gameId);
+  return {
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "#e59eff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+          boxSizing: "border-box",
+          textAlign: "center",
+        }}
+      >
         <div
           style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-            fontSize: 30,
+            fontSize: "30px",
+            lineHeight: 1.2,
+            wordBreak: "break-word",
+            whiteSpace: "pre-wrap",
+            maxWidth: "100%",
           }}
         >
-          <div>{`You won last round by playing ${playerMove}!`}</div>
+          {`You're registered for game #${gameId}!`}
         </div>
-      ),
-      intents: [<Button value="play">play</Button>],
-    };
+      </div>
+    ),
   };
+};
 
-  export const lost = (roundNumber: number, opponentName: string) => {
-    return {
-      action: `/game/:gameId/selectplay`,
-      image: (
-        <div
-          style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-            fontSize: 30,
-          }}
-        >
-          <div>{`You lost in round ${roundNumber} to ${opponentName}!`}</div>
-        </div>
-      )
-    };
+export const roundOne = (
+  gameId: string,
+  matchId: string,
+  userName: string,
+  opponentName: string
+) => {
+  return {
+    action: `/game/${gameId}/${matchId}/selectplay`,
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "#e59eff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+          boxSizing: "border-box",
+          textAlign: "center",
+          fontSize: 30,
+        }}
+      >
+        <div>{`Welcome to round 1 ${userName}!`}</div>
+        <div>{`You're matched up against ${opponentName}!`}</div>
+      </div>
+    ),
+    intents: [<Button value="play">play</Button>],
   };
+};
 
-  export const gameOver = (winnerName: string) => {
-    return {
-      action: `/game/:gameId/selectplay`,
-      image: (
-        <div
-          style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-            fontSize: 30,
-          }}
-        >
-          <div>{`The game was won by ${winnerName}!`}</div>
-        </div>
-      )
-    };
+export const wonLastRound = (
+  gameId: string,
+  matchId: string,
+  lastRoundPlayerMove: number
+) => {
+  return {
+    action: `/game/${gameId}/${matchId}/selectplay`,
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "#e59eff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+          boxSizing: "border-box",
+          textAlign: "center",
+          fontSize: 30,
+        }}
+      >
+        <div>{`You won last round by playing ${lastRoundPlayerMove}!`}</div>
+      </div>
+    ),
+    intents: [<Button value="play">play</Button>],
   };
+};
+
+export const lost = (roundNumber: number, opponentName: string) => {
+  return {
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "#e59eff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+          boxSizing: "border-box",
+          textAlign: "center",
+          fontSize: 30,
+        }}
+      >
+        <div>{`You lost in round ${roundNumber} to ${opponentName}!`}</div>
+      </div>
+    ),
+  };
+};
+
+export const gameOver = (winnerName: string) => {
+  return {
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "#e59eff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+          boxSizing: "border-box",
+          textAlign: "center",
+          fontSize: 30,
+        }}
+      >
+        <div>{`The game was won by ${winnerName}!`}</div>
+      </div>
+    ),
+  };
+};
