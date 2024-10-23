@@ -62,7 +62,7 @@ app.frame("/game/:gameId/play", async (c) => {
   );
 
   // console.log("fid: ", fid);
-  // console.log("userData:", userData);
+  console.log("userData:", userData);
   // console.log("gameData:", gameData);
   // console.log("currentRoundNumber:", currentRoundNumber);
   console.log("rounds: ", gameData.rounds);
@@ -80,7 +80,7 @@ app.frame("/game/:gameId/play", async (c) => {
       return c.res(registered(gameId));
     } else {
       // user is not registered
-      return c.res(register(gameId, fid.toString()));
+      return c.res(register(gameId, userData.profileName));
     }
   } else if (gameData.gameState === 2) {
     // game is active
@@ -110,10 +110,11 @@ app.frame("/game/:gameId/play", async (c) => {
       console.log("c");
       const lastMatchAndRound = getUsersLastMatch(gameData);
       console.log("lastMatchAndRound: ", lastMatchAndRound);
+      const opponentData = await fetchUserData(lastMatchAndRound.match.opponentId);
       return c.res(
         lost(
           lastMatchAndRound.roundLost,
-          lastMatchAndRound.match.opponentId.toString()
+          opponentData.profileName
         )
       );
     } else {
@@ -132,7 +133,8 @@ app.frame("/game/:gameId/play", async (c) => {
     }
   } else {
     // game is over
-    return c.res(gameOver(gameData.winnerId.toString()));
+    const winnerData = await fetchUserData(gameData.winnerId);
+    return c.res(gameOver(winnerData.profileName));
   }
 });
 
