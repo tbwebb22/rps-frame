@@ -138,7 +138,9 @@ export const homeFrame = (gameId: string) => {
 export const selectPlay = (
   gameId: string,
   matchId: string,
-  profileName: string
+  profileName: string,
+  roundNumber: string,
+  opponentName: string
 ) => {
   return {
     action: `/game/${gameId}/${matchId}/played`,
@@ -149,7 +151,7 @@ export const selectPlay = (
         color: "#e59eff",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: "space-between", // This will push content to top and bottom
         alignItems: "center",
         width: "100%",
         height: "100%",
@@ -159,27 +161,42 @@ export const selectPlay = (
         fontSize: 30,
       }}
       >
-        <div>Select your move!</div>
+        <div style={{ fontSize: 60, marginTop: 0, color: "#e59eff" }}>{`Round ${roundNumber}`}</div>
+        <div style={{ fontSize: 40, marginTop: 30, color: "#e59eff" }}>{`${profileName}`}</div>
+        <div style={{ fontSize: 40, marginTop: 0, color: "#e59eff" }}>{`vs`}</div>
+        <div style={{ fontSize: 40, marginTop: 0, color: "#e59eff" }}>{`${opponentName}`}</div>
+        <div style={{ fontSize: 40, marginTop: 40, color: "#e59eff" }}>{`Select your move`}</div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center", // Center items in the row
+            alignItems: "center", // Center items vertically
+            fontSize: 60,
+            // border: "2px solid red",
+            height: "30%",
+            marginTop: "60px",
+          }}
+        >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/rpsMoves.svg"
+          src="/rpsMoves2.svg"
           alt="Pepe"
           style={{
-            maxWidth: "50%",
-            height: "100%",
+            maxWidth: "100%",
+            maxHeight: "100%", // Limit height to ensure it doesn't overflow
             objectFit: "contain",
             display: "block",
-            flexShrink: 1,
-            padding: "0px",
-            // margin: "5%"
+            marginTop: "auto", // This pushes the image to the bottom
           }}
         />
+        </div>
       </div>
     ),
     intents: [
-      <Button value="Rock">rock</Button>,
-      <Button value="Pepe">pepe</Button>,
-      <Button value="Slizards">slizards</Button>,
+      <Button value="Rock">Rock</Button>,
+      <Button value="Pepe">Pepe</Button>,
+      <Button value="Slizards">Slizards</Button>,
     ],
   };
 };
@@ -586,6 +603,8 @@ export const roundOne = (
 export const wonLastRound = (
   gameId: string,
   matchId: string,
+  userName: string,
+  opponentName: string,
   lastRoundPlayerMove: number
 ) => {
   return {
@@ -607,14 +626,15 @@ export const wonLastRound = (
           fontSize: 30,
         }}
       >
+        <div>{`Congratulations ${userName}!`}</div>
         <div>
-          {lastRoundPlayerMove
-            ? `You won your last match by playing ${lastRoundPlayerMove}!`
+          {opponentName
+            ? `You won your last match against ${opponentName}`
             : `You won your last match!`}
         </div>
       </div>
     ),
-    intents: [<Button value="play">play</Button>],
+    intents: [<Button value="play">Next Match</Button>],
   };
 };
 
@@ -794,3 +814,4 @@ export const gameOver = (winnerName: string) => {
     ),
   };
 };
+

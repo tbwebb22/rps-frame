@@ -110,23 +110,23 @@ app.frame("/game/:gameId/play", async (c) => {
       console.log("c");
       const lastMatchAndRound = getUsersLastMatch(gameData);
       console.log("lastMatchAndRound: ", lastMatchAndRound);
-      const opponentData = await fetchUserData(lastMatchAndRound.match.opponentId);
-      return c.res(
-        lost(
-          lastMatchAndRound.roundLost,
-          opponentData.profileName
-        )
+      const opponentData = await fetchUserData(
+        lastMatchAndRound.match.opponentId
       );
+      return c.res(lost(lastMatchAndRound.roundLost, opponentData.profileName));
     } else {
       // user is in the current round
       console.log("d");
       console.log("currentRound: ", currentRound);
       const lastMatch = getUsersLastMatch(gameData);
       console.log("lastMatch: ", lastMatch);
+      const opponentData = await fetchUserData(lastMatch.match.opponentId);
       return c.res(
         wonLastRound(
           gameId,
           currentRound.match.id.toString(),
+          userData.profileName,
+          opponentData.profileName,
           lastMatch.match.playerMove
         )
       );
@@ -163,11 +163,36 @@ app.frame("/game/:gameId/:matchId/selectplay", async (c) => {
   const { data, error }: FarcasterUserDetailsOutput =
     await getFarcasterUserDetails(input);
 
-  const profileName = data.profileName;
-
   if (error) throw new Error(error);
 
-  return c.res(selectPlay(gameId, matchId, profileName));
+  const profileName = data.profileName;
+
+  const gameData = await fetchGameData(gameId, fid.toString());
+  const currentRoundNumber = gameData.rounds.find(
+    (round) => round.id === gameData.currentRoundId
+  )?.round_number;
+  const currentRound = gameData.rounds.find(
+    (round) => round.id === gameData.currentRoundId
+  );
+
+  const {
+    data: opponentData,
+    error: opponentError,
+  }: FarcasterUserDetailsOutput = await getFarcasterUserDetails({
+    fid: currentRound.match.opponentId,
+  } as FarcasterUserDetailsInput);
+
+  if (opponentError) throw new Error(opponentError);
+
+  return c.res(
+    selectPlay(
+      gameId,
+      matchId,
+      profileName,
+      currentRound.round_number.toString(),
+      opponentData.profileName
+    )
+  );
 });
 
 app.frame("/game/:gameId/:matchId/played", async (c) => {
