@@ -32,7 +32,22 @@ import {
   played,
 } from "../../frames/frames";
 
+// const app = new Frog({
+//   imageAspectRatio: "1:1",
+//   apiKey: process.env.AIRSTACK_API_KEY as string,
+//   basePath: "/api",
+//   assetsPath: "/",
+// });
+
 const app = new Frog({
+  hub: {
+    apiUrl: "https://hubs.airstack.xyz",
+    fetchOptions: {
+      headers: {
+        "x-airstack-hubs": process.env.AIRSTACK_API_KEY as string,
+      }
+    }
+  },
   imageAspectRatio: "1:1",
   apiKey: process.env.AIRSTACK_API_KEY as string,
   basePath: "/api",
@@ -45,22 +60,12 @@ app.frame("/game/:gameId", (c) => {
   return c.res(homeFrame(gameId));
 });
 
-// async function fetchUserInfos() {
-//   for (let i = 1; i < 200; i++) {
-//     const { data, error }: FarcasterUserDetailsOutput =
-//       await getFarcasterUserDetails({
-//         fid: i,
-//       });
-//     console.log(`${i}, ${data?.profileName}, ${data?.profileImage ? data?.profileImage.extraSmall : "null"}`);
-//   }
-// };
-
 app.frame("/game/:gameId/play", async (c) => {
   const { gameId } = c.req.param();
   const { frameData, verified } = c;
   const fid = frameData?.fid;
 
-  // await fetchUserInfos();
+  console.log("verified: ", verified);
 
   if (!fid) throw new Error("FID not found");
 
@@ -72,12 +77,6 @@ app.frame("/game/:gameId/play", async (c) => {
   const currentRound = gameData.rounds.find(
     (round) => round.id === gameData.currentRoundId
   );
-
-  // console.log("fid: ", fid);
-  console.log("userData:", userData);
-  // console.log("gameData:", gameData);
-  // console.log("currentRoundNumber:", currentRoundNumber);
-  console.log("rounds: ", gameData.rounds);
 
   if (gameData.gameState === 0) {
     // registration not started
@@ -96,10 +95,8 @@ app.frame("/game/:gameId/play", async (c) => {
     }
   } else if (gameData.gameState === 2) {
     // game is active
-    console.log("gamestate: 2");
     if (currentRound.match && currentRound.match.playerMove !== null) {
       // player already played
-      console.log("a");
       return c.res(
         played(gameId, getMoveString(currentRound.match.playerMove))
       );
@@ -127,16 +124,18 @@ app.frame("/game/:gameId/play", async (c) => {
       return c.res(lost(lastMatchAndRound.roundLost, opponentData.profileName));
     } else {
       // user is in the current round
-
       const lastMatch = getUsersLastMatch(gameData);
-      const opponentData = await fetchUserData(lastMatch.match.opponentId);
+
+      const opponentName = lastMatch.match.opponentId
+        ? (await fetchUserData(lastMatch.match.opponentId)).profileName
+        : "null";
 
       return c.res(
         wonLastRound(
           gameId,
           currentRound.match.id.toString(),
           userData.profileName,
-          opponentData.profileName,
+          opponentName,
           lastMatch.match.playerMove
         )
       );
@@ -161,7 +160,7 @@ app.frame("/game/:gameId/:matchId/selectplay", async (c) => {
   console.log("inside selectplay");
   const { gameId, matchId } = c.req.param();
   const { frameData, verified } = c;
-  const { buttonValue, status } = c;
+  // const { buttonValue, status } = c;
   const fid = frameData?.fid;
 
   if (!fid) throw new Error();
@@ -210,8 +209,6 @@ app.frame("/game/:gameId/:matchId/played", async (c) => {
   const { frameData, verified } = c;
   const { buttonValue, status } = c;
   const fid = frameData?.fid;
-
-  console.log("played buttonValue: ", buttonValue);
 
   await makePlay(Number(matchId), fid, getMoveNumber(buttonValue));
 

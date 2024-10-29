@@ -9,11 +9,10 @@ export const homeFrame = (gameId: string) => {
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "white", // Changed text color to improve visibility
+          color: "white",
           display: "flex",
           flexDirection: "column",
-          // justifyContent: "center", // Center content vertically
-          alignItems: "center", // Center content horizontally
+          alignItems: "center",
           fontSize: 60,
           width: "100%",
           height: "100%",
@@ -21,107 +20,7 @@ export const homeFrame = (gameId: string) => {
           // border: "2px solid yellow",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center", // Center items in the row
-            alignItems: "center", // Center items vertically
-            fontSize: 60,
-            // border: "2px solid red",
-            height: "50%",
-            marginTop: "60px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#ffb19f", margin: "0 10px" }}>Rock</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/rock.svg"
-              alt="Rock"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "20px",
-                // margin: "5%"
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#bcffbb", margin: "0 10px" }}>Pepe</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/pepe.svg"
-              alt="Pepe"
-              // width="200"
-              // height="200"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "10px",
-                // margin: "5%"
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#b3c8ff", margin: "0 10px" }}>Slizards</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/slizards.svg"
-              alt="Pepe"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "40px",
-                // margin: "5%"
-              }}
-            />
-          </div>
-        </div>
+        <HeroImage />
         <div style={{ fontSize: 40, marginTop: 50, color: "#e59eff" }}>
           Free to play
         </div>
@@ -146,26 +45,36 @@ export const selectPlay = (
     action: `/game/${gameId}/${matchId}/played`,
     image: (
       <div
-      style={{
-        backgroundColor: "#2f0040",
-        color: "#e59eff",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between", // This will push content to top and bottom
-        alignItems: "center",
-        width: "100%",
-        height: "100%",
-        padding: "20px",
-        boxSizing: "border-box",
-        textAlign: "center",
-        fontSize: 30,
-      }}
+        style={{
+          backgroundColor: "#2f0040",
+          color: "#e59eff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between", // This will push content to top and bottom
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+          boxSizing: "border-box",
+          textAlign: "center",
+          fontSize: 30,
+        }}
       >
-        <div style={{ fontSize: 60, marginTop: 0, color: "#e59eff" }}>{`Round ${roundNumber}`}</div>
-        <div style={{ fontSize: 40, marginTop: 30, color: "#e59eff" }}>{`${profileName}`}</div>
-        <div style={{ fontSize: 40, marginTop: 0, color: "#e59eff" }}>{`vs`}</div>
-        <div style={{ fontSize: 40, marginTop: 0, color: "#e59eff" }}>{`${opponentName}`}</div>
-        <div style={{ fontSize: 40, marginTop: 40, color: "#e59eff" }}>{`Select your move`}</div>
+        <div
+          style={{ fontSize: 60, marginTop: 0, color: "#e59eff" }}
+        >{`Round ${roundNumber}`}</div>
+        <div
+          style={{ fontSize: 40, marginTop: 30, color: "#e59eff" }}
+        >{`${profileName}`}</div>
+        <div
+          style={{ fontSize: 40, marginTop: 0, color: "#e59eff" }}
+        >{`vs`}</div>
+        <div
+          style={{ fontSize: 40, marginTop: 0, color: "#e59eff" }}
+        >{`${opponentName}`}</div>
+        <div
+          style={{ fontSize: 40, marginTop: 40, color: "#e59eff" }}
+        >{`Select your move`}</div>
         <div
           style={{
             display: "flex",
@@ -178,18 +87,18 @@ export const selectPlay = (
             marginTop: "60px",
           }}
         >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/rpsMoves2.svg"
-          alt="Pepe"
-          style={{
-            maxWidth: "100%",
-            maxHeight: "100%", // Limit height to ensure it doesn't overflow
-            objectFit: "contain",
-            display: "block",
-            marginTop: "auto", // This pushes the image to the bottom
-          }}
-        />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/rpsMoves2.svg"
+            alt="Pepe"
+            style={{
+              maxWidth: "100%",
+              maxHeight: "100%", // Limit height to ensure it doesn't overflow
+              objectFit: "contain",
+              display: "block",
+              marginTop: "auto", // This pushes the image to the bottom
+            }}
+          />
         </div>
       </div>
     ),
@@ -202,6 +111,14 @@ export const selectPlay = (
 };
 
 export const played = (gameId: string, playerMove: string) => {
+  let imgSrc;
+  if (playerMove === "Rock") {
+    imgSrc = "/rock.svg";
+  } else if (playerMove === "Pepe") {
+    imgSrc = "/pepe.svg";
+  } else {
+    imgSrc = "/slizards.svg";
+  }
   return {
     image: (
       <div
@@ -220,7 +137,24 @@ export const played = (gameId: string, playerMove: string) => {
           fontSize: 30,
         }}
       >
-        <div>{`You played ${playerMove}!`}</div>
+        <img
+          src={imgSrc}
+          alt="Rock"
+          style={{
+            width: "80%",
+            height: "80%",
+            objectFit: "contain",
+            display: "block",
+            flexShrink: 1,
+            padding: "20px",
+          }}
+        />
+        <div style={{ fontSize: 30, color: "#e59eff" }}>
+          Thanks for playing!
+        </div>
+        <div style={{ fontSize: 30, color: "#e59eff" }}>
+          Check back soon for the next round
+        </div>
       </div>
     ),
   };
@@ -232,18 +166,19 @@ export const registrationNotStarted = () => {
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "#e59eff",
+          color: "white", // Changed text color to improve visibility
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          // justifyContent: "center", // Center content vertically
+          alignItems: "center", // Center content horizontally
+          fontSize: 60,
           width: "100%",
           height: "100%",
-          padding: "20px",
           boxSizing: "border-box",
-          textAlign: "center",
+          // border: "2px solid yellow",
         }}
       >
+        <HeroImage />
         <div
           style={{
             fontSize: "30px",
@@ -253,7 +188,7 @@ export const registrationNotStarted = () => {
             maxWidth: "100%",
           }}
         >
-          {`Registration is has not begun yet! Check back soon`}
+          {`Registration has not begun yet! Check back soon`}
         </div>
       </div>
     ),
@@ -266,18 +201,19 @@ export const registrationFull = () => {
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "#e59eff",
+          color: "white", // Changed text color to improve visibility
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          // justifyContent: "center", // Center content vertically
+          alignItems: "center", // Center content horizontally
+          fontSize: 60,
           width: "100%",
           height: "100%",
-          padding: "20px",
           boxSizing: "border-box",
-          textAlign: "center",
+          // border: "2px solid yellow",
         }}
       >
+        <HeroImage />
         <div
           style={{
             fontSize: "30px",
@@ -313,107 +249,7 @@ export const register = (gameId: string, userName: string) => {
           // border: "2px solid yellow",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center", // Center items in the row
-            alignItems: "center", // Center items vertically
-            fontSize: 60,
-            // border: "2px solid red",
-            height: "50%",
-            marginTop: "60px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#ffb19f", margin: "0 10px" }}>Rock</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/rock.svg"
-              alt="Rock"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "20px",
-                // margin: "5%"
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#bcffbb", margin: "0 10px" }}>Pepe</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/pepe.svg"
-              alt="Pepe"
-              // width="200"
-              // height="200"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "10px",
-                // margin: "5%"
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#b3c8ff", margin: "0 10px" }}>Slizards</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/slizards.svg"
-              alt="Pepe"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "40px",
-                // margin: "5%"
-              }}
-            />
-          </div>
-        </div>
+        <HeroImage />
         <div
           style={{
             display: "flex",
@@ -451,107 +287,7 @@ export const registered = (gameId: string) => {
           // border: "2px solid yellow",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center", // Center items in the row
-            alignItems: "center", // Center items vertically
-            fontSize: 60,
-            // border: "2px solid red",
-            height: "50%",
-            marginTop: "60px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#ffb19f", margin: "0 10px" }}>Rock</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/rock.svg"
-              alt="Rock"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "20px",
-                // margin: "5%"
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#bcffbb", margin: "0 10px" }}>Pepe</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/pepe.svg"
-              alt="Pepe"
-              // width="200"
-              // height="200"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "10px",
-                // margin: "5%"
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#b3c8ff", margin: "0 10px" }}>Slizards</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/slizards.svg"
-              alt="Pepe"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "40px",
-                // margin: "5%"
-              }}
-            />
-          </div>
-        </div>
+        <HeroImage />
         <div
           style={{
             display: "flex",
@@ -579,21 +315,39 @@ export const roundOne = (
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "#e59eff",
+          color: "white", // Changed text color to improve visibility
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          // justifyContent: "center", // Center content vertically
+          alignItems: "center", // Center content horizontally
+          fontSize: 60,
           width: "100%",
           height: "100%",
-          padding: "20px",
           boxSizing: "border-box",
-          textAlign: "center",
-          fontSize: 60,
+          // border: "2px solid yellow",
         }}
       >
-        <div>{`Welcome to round 1 ${userName}!`}</div>
-        <div>{`You're matched up against ${opponentName}!`}</div>
+        <HeroImage />
+        <div
+          style={{
+            display: "flex",
+            fontSize: 30,
+            marginTop: 50,
+            color: "#e59eff",
+          }}
+        >
+          {`Welcome to round 1 ${userName}!`}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            fontSize: 30,
+            marginTop: 0,
+            color: "#e59eff",
+          }}
+        >
+          {`You're matched up against ${opponentName}!`}
+        </div>
       </div>
     ),
     intents: [<Button value="play">play</Button>],
@@ -613,21 +367,35 @@ export const wonLastRound = (
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "#e59eff",
+          color: "white", // Changed text color to improve visibility
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          alignItems: "center", // Center content horizontally
+          fontSize: 60,
           width: "100%",
           height: "100%",
-          padding: "20px",
           boxSizing: "border-box",
-          textAlign: "center",
-          fontSize: 30,
         }}
       >
-        <div>{`Congratulations ${userName}!`}</div>
-        <div>
+        <HeroImage />
+        <div
+          style={{
+            display: "flex",
+            fontSize: 30,
+            marginTop: 50,
+            color: "#e59eff",
+          }}
+        >
+          {`Congratulations ${userName}!`}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            fontSize: 30,
+            marginTop: 0,
+            color: "#e59eff",
+          }}
+        >
           {opponentName
             ? `You won your last match against ${opponentName}`
             : `You won your last match!`}
@@ -656,107 +424,7 @@ export const lost = (roundNumber: number, opponentName: string) => {
           // border: "2px solid yellow",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center", // Center items in the row
-            alignItems: "center", // Center items vertically
-            fontSize: 60,
-            // border: "2px solid red",
-            height: "50%",
-            marginTop: "60px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#ffb19f", margin: "0 10px" }}>Rock</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/rock.svg"
-              alt="Rock"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "20px",
-                // margin: "5%"
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#bcffbb", margin: "0 10px" }}>Pepe</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/pepe.svg"
-              alt="Pepe"
-              // width="200"
-              // height="200"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "10px",
-                // margin: "5%"
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#b3c8ff", margin: "0 10px" }}>Slizards</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/slizards.svg"
-              alt="Pepe"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "40px",
-                // margin: "5%"
-              }}
-            />
-          </div>
-        </div>
+        <HeroImage />
         <div
           style={{
             display: "flex",
@@ -770,7 +438,7 @@ export const lost = (roundNumber: number, opponentName: string) => {
         <div
           style={{
             display: "flex",
-            fontSize: 40,
+            fontSize: 30,
             marginTop: 0,
             color: "#e59eff",
           }}
@@ -778,7 +446,7 @@ export const lost = (roundNumber: number, opponentName: string) => {
         <div
           style={{
             display: "flex",
-            fontSize: 40,
+            fontSize: 30,
             marginTop: 0,
             color: "#e59eff",
           }}
@@ -796,22 +464,124 @@ export const gameOver = (winnerName: string) => {
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "#e59eff",
+          color: "white", // Changed text color to improve visibility
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          alignItems: "center", // Center content horizontally
+          fontSize: 60,
           width: "100%",
           height: "100%",
-          padding: "20px",
           boxSizing: "border-box",
-          textAlign: "center",
-          fontSize: 30,
         }}
       >
-        <div>{`The game was won by @${winnerName}!`}</div>
+        <HeroImage />
+        <div
+          style={{ fontSize: 30, color: "#e59eff" }}
+        >{`The game was won by @${winnerName}!`}</div>
       </div>
     ),
   };
 };
 
+const HeroImage = () => (
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center", // Center items in the row
+      alignItems: "center", // Center items vertically
+      fontSize: 60,
+      height: "50%",
+      marginTop: "60px",
+    }}
+  >
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center", // Center items in the row
+        alignItems: "center", // Center items vertically
+        fontSize: 60,
+        maxHeight: "100%",
+        maxWidth: "100%",
+        flexShrink: 1,
+      }}
+    >
+      <div style={{ color: "#ffb19f", margin: "0 10px" }}>Rock</div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/rock.svg"
+        alt="Rock"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          display: "block",
+          flexShrink: 1,
+          padding: "20px",
+          // margin: "5%"
+        }}
+      />
+    </div>
+
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center", // Center items in the row
+        alignItems: "center", // Center items vertically
+        fontSize: 60,
+        maxHeight: "100%", // Add this line
+        maxWidth: "100%", // Add this line
+        flexShrink: 1, // Allow it to shrink
+      }}
+    >
+      <div style={{ color: "#bcffbb", margin: "0 10px" }}>Pepe</div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/pepe.svg"
+        alt="Pepe"
+        // width="200"
+        // height="200"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          display: "block",
+          flexShrink: 1,
+          padding: "10px",
+          // margin: "5%"
+        }}
+      />
+    </div>
+
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center", // Center items in the row
+        alignItems: "center", // Center items vertically
+        fontSize: 60,
+        maxHeight: "100%", // Add this line
+        maxWidth: "100%", // Add this line
+        flexShrink: 1, // Allow it to shrink
+      }}
+    >
+      <div style={{ color: "#b3c8ff", margin: "0 10px" }}>Slizards</div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/slizards.svg"
+        alt="Pepe"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          display: "block",
+          flexShrink: 1,
+          padding: "40px",
+          // margin: "5%"
+        }}
+      />
+    </div>
+  </div>
+);
