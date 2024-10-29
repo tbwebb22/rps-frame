@@ -45,10 +45,22 @@ app.frame("/game/:gameId", (c) => {
   return c.res(homeFrame(gameId));
 });
 
+// async function fetchUserInfos() {
+//   for (let i = 1; i < 200; i++) {
+//     const { data, error }: FarcasterUserDetailsOutput =
+//       await getFarcasterUserDetails({
+//         fid: i,
+//       });
+//     console.log(`${i}, ${data?.profileName}, ${data?.profileImage ? data?.profileImage.extraSmall : "null"}`);
+//   }
+// };
+
 app.frame("/game/:gameId/play", async (c) => {
   const { gameId } = c.req.param();
   const { frameData, verified } = c;
   const fid = frameData?.fid;
+
+  // await fetchUserInfos();
 
   if (!fid) throw new Error("FID not found");
 
@@ -94,33 +106,31 @@ app.frame("/game/:gameId/play", async (c) => {
       // TODO: add case for no opponent
     } else if (currentRoundNumber === 1) {
       // round one
-      console.log("b");
+      const opponentData = await fetchUserData(currentRound.match.opponentId);
+
       return c.res(
         roundOne(
           gameId,
           currentRound.match.id.toString(),
-          fid.toString(),
-          currentRound.match.opponentId
-            ? currentRound.match.opponentId.toString()
-            : null
+          userData.profileName,
+          opponentData ? opponentData.profileName : null
         )
       );
     } else if (!gameData.rounds[currentRoundNumber - 1].match) {
       // user lost in last round or a previous round
-      console.log("c");
+
       const lastMatchAndRound = getUsersLastMatch(gameData);
-      console.log("lastMatchAndRound: ", lastMatchAndRound);
       const opponentData = await fetchUserData(
         lastMatchAndRound.match.opponentId
       );
+
       return c.res(lost(lastMatchAndRound.roundLost, opponentData.profileName));
     } else {
       // user is in the current round
-      console.log("d");
-      console.log("currentRound: ", currentRound);
+
       const lastMatch = getUsersLastMatch(gameData);
-      console.log("lastMatch: ", lastMatch);
       const opponentData = await fetchUserData(lastMatch.match.opponentId);
+
       return c.res(
         wonLastRound(
           gameId,
