@@ -1,14 +1,9 @@
 /* eslint-disable react/jsx-key */
 /** @jsxImportSource @airstack/frog/jsx */
-import { Button, Frog } from "@airstack/frog";
+import { Frog } from "@airstack/frog";
 import { handle } from "@airstack/frog/next";
 import { devtools } from "@airstack/frog/dev";
 import { serveStatic } from "@airstack/frog/serve-static";
-import {
-  getFarcasterUserDetails,
-  FarcasterUserDetailsInput,
-  FarcasterUserDetailsOutput,
-} from "@airstack/frog";
 import {
   fetchGameData,
   fetchUserData,
@@ -31,15 +26,13 @@ import {
   wonLastRound,
   played,
 } from "../../frames/frames";
+import { GameData } from "../../../types/types";
 
-// const app = new Frog({
-//   imageAspectRatio: "1:1",
-//   apiKey: process.env.AIRSTACK_API_KEY as string,
-//   basePath: "/api",
-//   assetsPath: "/",
-// });
+type State = {
+  game: GameData | null;
+}
 
-const app = new Frog({
+const app = new Frog<{ State: State }>({ 
   hub: {
     apiUrl: "https://hubs.airstack.xyz",
     fetchOptions: {
@@ -49,9 +42,13 @@ const app = new Frog({
     }
   },
   imageAspectRatio: "1:1",
+  //TODO: is this apiKey needed?
   apiKey: process.env.AIRSTACK_API_KEY as string,
   basePath: "/api",
   assetsPath: "/",
+  initialState: {
+    game: null,
+  },
 });
 
 app.frame("/game/:gameId", (c) => {
@@ -62,18 +59,19 @@ app.frame("/game/:gameId", (c) => {
 
 app.frame("/game/:gameId/play", async (c) => {
   const { gameId } = c.req.param();
-  const { frameData, verified } = c;
+  const { frameData, verified, deriveState } = c;
   const fid = frameData?.fid;
 
   console.log("verified: ", verified);
 
   if (!fid) throw new Error("FID not found");
 
-  const userData = await fetchUserData(fid);
   const gameData = await fetchGameData(gameId, fid.toString());
-  const currentRoundNumber = gameData.rounds.find(
-    (round) => round.id === gameData.currentRoundId
-  )?.round_number;
+
+  deriveState(state => {
+    state.game = gameData;
+  });
+  
   const currentRound = gameData.rounds.find(
     (round) => round.id === gameData.currentRoundId
   );
@@ -91,7 +89,7 @@ app.frame("/game/:gameId/play", async (c) => {
       return c.res(registered(gameId));
     } else {
       // user is not registered
-      return c.res(register(gameId, userData.profileName));
+      return c.res(register(gameId, gameData.userName));
     }
   } else if (gameData.gameState === 2) {
     // game is active
@@ -101,7 +99,7 @@ app.frame("/game/:gameId/play", async (c) => {
         played(gameId, getMoveString(currentRound.match.playerMove))
       );
       // TODO: add case for no opponent
-    } else if (currentRoundNumber === 1) {
+    } else if (currentRound.round_number === 1) {
       // round one
       const opponentData = await fetchUserData(currentRound.match.opponentId);
 
@@ -109,11 +107,11 @@ app.frame("/game/:gameId/play", async (c) => {
         roundOne(
           gameId,
           currentRound.match.id.toString(),
-          userData.profileName,
+          gameData.userName,
           opponentData ? opponentData.profileName : null
         )
       );
-    } else if (!gameData.rounds[currentRoundNumber - 1].match) {
+    } else if (!gameData.rounds[currentRound.round_number - 1].match) {
       // user lost in last round or a previous round
 
       const lastMatchAndRound = getUsersLastMatch(gameData);
@@ -126,15 +124,15 @@ app.frame("/game/:gameId/play", async (c) => {
       // user is in the current round
       const lastMatch = getUsersLastMatch(gameData);
 
-      const opponentName = lastMatch.match.opponentId
-        ? (await fetchUserData(lastMatch.match.opponentId)).profileName
+      const opponentName = lastMatch.match.opponentName
+        ? lastMatch.match.opponentName
         : "null";
 
       return c.res(
         wonLastRound(
           gameId,
           currentRound.match.id.toString(),
-          userData.profileName,
+          gameData.userName,
           opponentName,
           lastMatch.match.playerMove
         )
@@ -149,7 +147,7 @@ app.frame("/game/:gameId/play", async (c) => {
 
 app.frame("/game/:gameId/registered", async (c) => {
   const { gameId } = c.req.param();
-  const { frameData, verified } = c;
+  const { frameData } = c;
   const fid = frameData?.fid;
 
   await registerUserForGame(fid, Number(gameId));
@@ -157,57 +155,35 @@ app.frame("/game/:gameId/registered", async (c) => {
 });
 
 app.frame("/game/:gameId/:matchId/selectplay", async (c) => {
-  console.log("inside selectplay");
   const { gameId, matchId } = c.req.param();
-  const { frameData, verified } = c;
-  // const { buttonValue, status } = c;
+  const { frameData, deriveState } = c;
   const fid = frameData?.fid;
 
   if (!fid) throw new Error();
 
-  const input: FarcasterUserDetailsInput = {
-    fid: fid,
-  };
+  let game: GameData;
+  deriveState(state => {
+    game = state.game;
+  });
 
-  const { data, error }: FarcasterUserDetailsOutput =
-    await getFarcasterUserDetails(input);
-
-  if (error) throw new Error(error);
-
-  const profileName = data.profileName;
-
-  const gameData = await fetchGameData(gameId, fid.toString());
-  const currentRoundNumber = gameData.rounds.find(
-    (round) => round.id === gameData.currentRoundId
-  )?.round_number;
-  const currentRound = gameData.rounds.find(
-    (round) => round.id === gameData.currentRoundId
+  const currentRound = game.rounds.find(
+    (round) => round.id === game.currentRoundId
   );
-
-  const {
-    data: opponentData,
-    error: opponentError,
-  }: FarcasterUserDetailsOutput = await getFarcasterUserDetails({
-    fid: currentRound.match.opponentId,
-  } as FarcasterUserDetailsInput);
-
-  if (opponentError) throw new Error(opponentError);
 
   return c.res(
     selectPlay(
       gameId,
       matchId,
-      profileName,
+      game.userName,
       currentRound.round_number.toString(),
-      opponentData.profileName
+      currentRound.match.opponentName ? currentRound.match.opponentName : null
     )
   );
 });
 
 app.frame("/game/:gameId/:matchId/played", async (c) => {
   const { gameId, matchId } = c.req.param();
-  const { frameData, verified } = c;
-  const { buttonValue, status } = c;
+  const { frameData, buttonValue } = c;
   const fid = frameData?.fid;
 
   await makePlay(Number(matchId), fid, getMoveNumber(buttonValue));

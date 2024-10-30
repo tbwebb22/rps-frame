@@ -17,7 +17,6 @@ export const homeFrame = (gameId: string) => {
           width: "100%",
           height: "100%",
           boxSizing: "border-box",
-          // border: "2px solid yellow",
         }}
       >
         <HeroImage />
@@ -27,7 +26,7 @@ export const homeFrame = (gameId: string) => {
         <div style={{ fontSize: 40, color: "#e59eff" }}>
           {`Tournament #${gameId}`}
         </div>
-        {/* <div style={{ fontSize: 40, color: "#e59eff" }}>Win 10,000 MOXIE</div> */}
+        {/* <div style={{ fontSize: 40, color: "#e59eff" }}>Win MOXIE</div> */}
       </div>
     ),
     intents: [<Button>Play</Button>],
@@ -50,7 +49,7 @@ export const selectPlay = (
           color: "#e59eff",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between", // This will push content to top and bottom
+          justifyContent: "space-between",
           alignItems: "center",
           width: "100%",
           height: "100%",
@@ -79,10 +78,9 @@ export const selectPlay = (
           style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "center", // Center items in the row
-            alignItems: "center", // Center items vertically
+            justifyContent: "center",
+            alignItems: "center",
             fontSize: 60,
-            // border: "2px solid red",
             height: "30%",
             marginTop: "60px",
           }}
@@ -93,10 +91,10 @@ export const selectPlay = (
             alt="Pepe"
             style={{
               maxWidth: "100%",
-              maxHeight: "100%", // Limit height to ensure it doesn't overflow
+              maxHeight: "100%",
               objectFit: "contain",
               display: "block",
-              marginTop: "auto", // This pushes the image to the bottom
+              marginTop: "auto",
             }}
           />
         </div>
@@ -166,16 +164,14 @@ export const registrationNotStarted = () => {
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "white", // Changed text color to improve visibility
+          color: "white",
           display: "flex",
           flexDirection: "column",
-          // justifyContent: "center", // Center content vertically
-          alignItems: "center", // Center content horizontally
+          alignItems: "center",
           fontSize: 60,
           width: "100%",
           height: "100%",
           boxSizing: "border-box",
-          // border: "2px solid yellow",
         }}
       >
         <HeroImage />
@@ -201,16 +197,14 @@ export const registrationFull = () => {
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "white", // Changed text color to improve visibility
+          color: "white",
           display: "flex",
           flexDirection: "column",
-          // justifyContent: "center", // Center content vertically
-          alignItems: "center", // Center content horizontally
+          alignItems: "center",
           fontSize: 60,
           width: "100%",
           height: "100%",
           boxSizing: "border-box",
-          // border: "2px solid yellow",
         }}
       >
         <HeroImage />
@@ -237,16 +231,14 @@ export const register = (gameId: string, userName: string) => {
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "white", // Changed text color to improve visibility
+          color: "white",
           display: "flex",
           flexDirection: "column",
-          // justifyContent: "center", // Center content vertically
-          alignItems: "center", // Center content horizontally
+          alignItems: "center",
           fontSize: 60,
           width: "100%",
           height: "100%",
           boxSizing: "border-box",
-          // border: "2px solid yellow",
         }}
       >
         <HeroImage />
@@ -275,16 +267,14 @@ export const registered = (gameId: string) => {
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "white", // Changed text color to improve visibility
+          color: "white",
           display: "flex",
           flexDirection: "column",
-          // justifyContent: "center", // Center content vertically
-          alignItems: "center", // Center content horizontally
+          alignItems: "center",
           fontSize: 60,
           width: "100%",
           height: "100%",
           boxSizing: "border-box",
-          // border: "2px solid yellow",
         }}
       >
         <HeroImage />
@@ -315,16 +305,14 @@ export const roundOne = (
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "white", // Changed text color to improve visibility
+          color: "white",
           display: "flex",
           flexDirection: "column",
-          // justifyContent: "center", // Center content vertically
-          alignItems: "center", // Center content horizontally
+          alignItems: "center",
           fontSize: 60,
           width: "100%",
           height: "100%",
           boxSizing: "border-box",
-          // border: "2px solid yellow",
         }}
       >
         <HeroImage />
@@ -367,10 +355,10 @@ export const wonLastRound = (
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "white", // Changed text color to improve visibility
+          color: "white",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center", // Center content horizontally
+          alignItems: "center",
           fontSize: 60,
           width: "100%",
           height: "100%",
@@ -412,16 +400,13 @@ export const lost = (roundNumber: number, opponentName: string) => {
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "white", // Changed text color to improve visibility
           display: "flex",
           flexDirection: "column",
-          // justifyContent: "center", // Center content vertically
-          alignItems: "center", // Center content horizontally
+          alignItems: "center",
           fontSize: 60,
           width: "100%",
           height: "100%",
           boxSizing: "border-box",
-          // border: "2px solid yellow",
         }}
       >
         <HeroImage />
@@ -464,10 +449,10 @@ export const gameOver = (winnerName: string) => {
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "white", // Changed text color to improve visibility
+          color: "white",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center", // Center content horizontally
+          alignItems: "center",
           fontSize: 60,
           width: "100%",
           height: "100%",
@@ -488,8 +473,8 @@ const HeroImage = () => (
     style={{
       display: "flex",
       flexDirection: "row",
-      justifyContent: "center", // Center items in the row
-      alignItems: "center", // Center items vertically
+      justifyContent: "center",
+      alignItems: "center",
       fontSize: 60,
       height: "50%",
       marginTop: "60px",
@@ -499,8 +484,8 @@ const HeroImage = () => (
       style={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center", // Center items in the row
-        alignItems: "center", // Center items vertically
+        justifyContent: "center",
+        alignItems: "center",
         fontSize: 60,
         maxHeight: "100%",
         maxWidth: "100%",
@@ -519,7 +504,6 @@ const HeroImage = () => (
           display: "block",
           flexShrink: 1,
           padding: "20px",
-          // margin: "5%"
         }}
       />
     </div>
@@ -528,12 +512,12 @@ const HeroImage = () => (
       style={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center", // Center items in the row
-        alignItems: "center", // Center items vertically
+        justifyContent: "center",
+        alignItems: "center",
         fontSize: 60,
-        maxHeight: "100%", // Add this line
-        maxWidth: "100%", // Add this line
-        flexShrink: 1, // Allow it to shrink
+        maxHeight: "100%",
+        maxWidth: "100%",
+        flexShrink: 1,
       }}
     >
       <div style={{ color: "#bcffbb", margin: "0 10px" }}>Pepe</div>
@@ -541,8 +525,6 @@ const HeroImage = () => (
       <img
         src="/pepe.svg"
         alt="Pepe"
-        // width="200"
-        // height="200"
         style={{
           width: "100%",
           height: "100%",
@@ -550,7 +532,6 @@ const HeroImage = () => (
           display: "block",
           flexShrink: 1,
           padding: "10px",
-          // margin: "5%"
         }}
       />
     </div>
@@ -559,12 +540,12 @@ const HeroImage = () => (
       style={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center", // Center items in the row
-        alignItems: "center", // Center items vertically
+        justifyContent: "center",
+        alignItems: "center",
         fontSize: 60,
-        maxHeight: "100%", // Add this line
-        maxWidth: "100%", // Add this line
-        flexShrink: 1, // Allow it to shrink
+        maxHeight: "100%",
+        maxWidth: "100%",
+        flexShrink: 1,
       }}
     >
       <div style={{ color: "#b3c8ff", margin: "0 10px" }}>Slizards</div>
@@ -579,7 +560,6 @@ const HeroImage = () => (
           display: "block",
           flexShrink: 1,
           padding: "40px",
-          // margin: "5%"
         }}
       />
     </div>
