@@ -2,14 +2,6 @@
 /** @jsxImportSource @airstack/frog/jsx */
 import { Button, Frog } from "@airstack/frog";
 
-// register
-// roundOne
-// wonLastRound
-// lostLastRound
-// notSelected
-// played
-// gameOver
-
 export const homeFrame = (gameId: string) => {
   return {
     action: `/game/${gameId}/play`,
@@ -17,419 +9,559 @@ export const homeFrame = (gameId: string) => {
       <div
         style={{
           backgroundColor: "#2f0040",
-          color: "white", // Changed text color to improve visibility
+          color: "white",
           display: "flex",
           flexDirection: "column",
-          // justifyContent: "center", // Center content vertically
-          alignItems: "center", // Center content horizontally
+          alignItems: "center",
           fontSize: 60,
           width: "100%",
           height: "100%",
           boxSizing: "border-box",
-          // border: "2px solid yellow",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center", // Center items in the row
-            alignItems: "center", // Center items vertically
-            fontSize: 60,
-            // border: "2px solid red",
-            height: "50%",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#ffb19f", margin: "0 10px" }}>Rock</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/rock.svg"
-              alt="Rock"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "20px",
-                // margin: "5%"
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#bcffbb", margin: "0 10px" }}>Pepe</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/pepe.svg"
-              alt="Pepe"
-              // width="200"
-              // height="200"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "10px",
-                // margin: "5%"
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center", // Center items in the row
-              alignItems: "center", // Center items vertically
-              fontSize: 60,
-              maxHeight: "100%", // Add this line
-              maxWidth: "100%", // Add this line
-              flexShrink: 1, // Allow it to shrink
-            }}
-          >
-            <div style={{ color: "#b3c8ff", margin: "0 10px" }}>Slizards</div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/slizards.svg"
-              alt="Pepe"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                display: "block",
-                flexShrink: 1,
-                padding: "40px",
-                // margin: "5%"
-              }}
-            />
-          </div>
+        <HeroImage />
+        <div style={{ fontSize: 40, marginTop: 50, color: "#e59eff" }}>
+          Free to play
         </div>
-        <div style={{ fontSize: 40, marginTop: 10, color: "#e59eff" }}>
-          {`Game #${gameId}`}
+        <div style={{ fontSize: 40, color: "#e59eff" }}>
+          {`Tournament #${gameId}`}
         </div>
-        <div style={{ fontSize: 40, color: "#e59eff" }}>Play for free</div>
-        <div style={{ fontSize: 40, color: "#e59eff" }}>Win 10,000 MOXIE</div>
+        {/* <div style={{ fontSize: 40, color: "#e59eff" }}>Win MOXIE</div> */}
       </div>
     ),
     intents: [<Button>Play</Button>],
   };
 };
 
-export const selectPlay = (gameId: string, matchId: string, profileName: string) => {
-    return {
-      action: `/game/${gameId}/${matchId}/played`,
-      image: (
+export const selectPlay = (
+  gameId: string,
+  matchId: string,
+  profileName: string,
+  roundNumber: string,
+  opponentName: string
+) => {
+  return {
+    action: `/game/${gameId}/${matchId}/played`,
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "#e59eff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+          boxSizing: "border-box",
+          textAlign: "center",
+          fontSize: 30,
+        }}
+      >
+        <div
+          style={{ fontSize: 60, marginTop: 0, color: "#e59eff" }}
+        >{`Round ${roundNumber}`}</div>
+        <div
+          style={{ fontSize: 40, marginTop: 30, color: "#e59eff" }}
+        >{`${profileName}`}</div>
+        <div
+          style={{ fontSize: 40, marginTop: 0, color: "#e59eff" }}
+        >{`vs`}</div>
+        <div
+          style={{ fontSize: 40, marginTop: 0, color: "#e59eff" }}
+        >{`${opponentName}`}</div>
+        <div
+          style={{ fontSize: 40, marginTop: 40, color: "#e59eff" }}
+        >{`Select your move`}</div>
         <div
           style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-            fontSize: 30,
+            fontSize: 60,
+            height: "30%",
+            marginTop: "60px",
           }}
         >
-          <div>{`Welcome to game #${gameId} ${profileName}!`}</div>
-          <div>Select your move!</div>
-        </div>
-      ),
-      intents: [
-        <Button value="Rock">rock</Button>,
-        <Button value="Pepe">pepe</Button>,
-        <Button value="Slizards">slizards</Button>,
-      ],
-    };
-  };
-
-  export const played = (gameId: string, playerMove: string) => {
-    return {
-      action: `/game/${gameId}/played`,
-      image: (
-        <div
-          style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-            fontSize: 30,
-          }}
-        >
-          <div>{`You played ${playerMove}!`}</div>
-        </div>
-      )
-    };
-  };
-  
-  export const registrationNotStarted = () => {
-    return {
-      image: (
-        <div
-          style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-          }}
-        >
-          <div
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/rpsMoves2.svg"
+            alt="Pepe"
             style={{
-              fontSize: "30px",
-              lineHeight: 1.2,
-              wordBreak: "break-word",
-              whiteSpace: "pre-wrap",
               maxWidth: "100%",
+              maxHeight: "100%",
+              objectFit: "contain",
+              display: "block",
+              marginTop: "auto",
             }}
-          >
-            {`Registration is has not begun yet! Check back soon`}
-          </div>
+          />
         </div>
-      ),
-    };
+      </div>
+    ),
+    intents: [
+      <Button value="Rock">Rock</Button>,
+      <Button value="Pepe">Pepe</Button>,
+      <Button value="Slizards">Slizards</Button>,
+    ],
   };
+};
 
-  export const registrationFull = () => {
-    return {
-      image: (
+export const played = (gameId: string, playerMove: string) => {
+  let imgSrc;
+  if (playerMove === "Rock") {
+    imgSrc = "/rock.svg";
+  } else if (playerMove === "Pepe") {
+    imgSrc = "/pepe.svg";
+  } else {
+    imgSrc = "/slizards.svg";
+  }
+  return {
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "#e59eff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          padding: "20px",
+          boxSizing: "border-box",
+          textAlign: "center",
+          fontSize: 30,
+        }}
+      >
+        <img
+          src={imgSrc}
+          alt="Rock"
+          style={{
+            width: "80%",
+            height: "80%",
+            objectFit: "contain",
+            display: "block",
+            flexShrink: 1,
+            padding: "20px",
+          }}
+        />
+        <div style={{ fontSize: 30, color: "#e59eff" }}>
+          Thanks for playing!
+        </div>
+        <div style={{ fontSize: 30, color: "#e59eff" }}>
+          Check back soon for the next round
+        </div>
+      </div>
+    ),
+  };
+};
+
+export const registrationNotStarted = () => {
+  return {
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "white",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontSize: 60,
+          width: "100%",
+          height: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <HeroImage />
         <div
           style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
+            fontSize: "30px",
+            lineHeight: 1.2,
+            wordBreak: "break-word",
+            whiteSpace: "pre-wrap",
+            maxWidth: "100%",
           }}
         >
-          <div
-            style={{
-              fontSize: "30px",
-              lineHeight: 1.2,
-              wordBreak: "break-word",
-              whiteSpace: "pre-wrap",
-              maxWidth: "100%",
-            }}
-          >
-            {`Registration is full!\nCheck back soon for the next game!`}
-          </div>
+          {`Registration has not begun yet! Check back soon`}
         </div>
-      ),
-    };
+      </div>
+    ),
   };
+};
 
-  export const register = (gameId: string) => {
-    return {
-      action: `/game/${gameId}/registered`,
-      image: (
+export const registrationFull = () => {
+  return {
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "white",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontSize: 60,
+          width: "100%",
+          height: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <HeroImage />
         <div
           style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
+            fontSize: "30px",
+            lineHeight: 1.2,
+            wordBreak: "break-word",
+            whiteSpace: "pre-wrap",
+            maxWidth: "100%",
+          }}
+        >
+          {`Registration is full!\nCheck back soon for the next game!`}
+        </div>
+      </div>
+    ),
+  };
+};
+
+export const register = (gameId: string, userName: string) => {
+  return {
+    action: `/game/${gameId}/registered`,
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "white",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontSize: 60,
+          width: "100%",
+          height: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <HeroImage />
+        <div
+          style={{
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
+            fontSize: 40,
+            marginTop: 50,
+            color: "#e59eff",
+          }}
+        >{`Welcome ${userName}!`}</div>
+        <div style={{ display: "flex", fontSize: 40, color: "#e59eff" }}>
+          Register below to play
+        </div>
+        {/* <div style={{ fontSize: 40, color: "#e59eff" }}>Win 10,000 MOXIE</div> */}
+      </div>
+    ),
+    intents: [<Button value="register">register</Button>],
+  };
+};
+
+export const registered = (gameId: string) => {
+  console.log("gameId: ", gameId);
+  return {
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "white",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontSize: 60,
+          width: "100%",
+          height: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <HeroImage />
+        <div
+          style={{
+            display: "flex",
+            fontSize: 40,
+            marginTop: 50,
+            color: "#e59eff",
+          }}
+        >
+          Thanks for registering!
+        </div>
+      </div>
+    ),
+  };
+};
+
+export const roundOne = (
+  gameId: string,
+  matchId: string,
+  userName: string,
+  opponentName: string
+) => {
+  return {
+    action: `/game/${gameId}/${matchId}/selectplay`,
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "white",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontSize: 60,
+          width: "100%",
+          height: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <HeroImage />
+        <div
+          style={{
+            display: "flex",
             fontSize: 30,
+            marginTop: 50,
+            color: "#e59eff",
           }}
         >
-          <div>{`Register for game #6 below!`}</div>
+          {`Welcome to round 1 ${userName}!`}
         </div>
-      ),
-      intents: [<Button value="register">register</Button>],
-    };
-  };
-
-  export const registered = (gameId: string) => {
-    console.log("gameId: ", gameId);
-    return {
-      image: (
         <div
           style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "30px",
-              lineHeight: 1.2,
-              wordBreak: "break-word",
-              whiteSpace: "pre-wrap",
-              maxWidth: "100%",
-            }}
-          >
-            {`You're registered for game #${gameId}!`}
-          </div>
-        </div>
-      ),
-    };
-  };
-    
-  export const roundOne = (gameId: string) => {
-    return {
-      action: `/game/:gameId/selectplay`,
-      image: (
-        <div
-          style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
             fontSize: 30,
+            marginTop: 0,
+            color: "#e59eff",
           }}
         >
-          <div>{`Welcome to round one of game ${gameId}!`}</div>
+          {`You're matched up against ${opponentName}!`}
         </div>
-      ),
-      intents: [<Button value="play">play</Button>],
-    };
+      </div>
+    ),
+    intents: [<Button value="play">play</Button>],
   };
+};
 
-  export const wonLastRound = (gameId: string, matchId: string, playerMove: number) => {
-    return {
-      action: `/game/${gameId}/${matchId}/selectplay`,
-      image: (
+export const wonLastRound = (
+  gameId: string,
+  matchId: string,
+  userName: string,
+  opponentName: string,
+  lastRoundPlayerMove: number
+) => {
+  return {
+    action: `/game/${gameId}/${matchId}/selectplay`,
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "white",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontSize: 60,
+          width: "100%",
+          height: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <HeroImage />
         <div
           style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
             fontSize: 30,
+            marginTop: 50,
+            color: "#e59eff",
           }}
         >
-          <div>{`You won last round by playing ${playerMove}!`}</div>
+          {`Congratulations ${userName}!`}
         </div>
-      ),
-      intents: [<Button value="play">play</Button>],
-    };
-  };
-
-  export const lost = (roundNumber: number, opponentName: string) => {
-    return {
-      action: `/game/:gameId/selectplay`,
-      image: (
         <div
           style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
             fontSize: 30,
+            marginTop: 0,
+            color: "#e59eff",
           }}
         >
-          <div>{`You lost in round ${roundNumber} to ${opponentName}!`}</div>
+          {opponentName
+            ? `You won your last match against ${opponentName}`
+            : `You won your last match!`}
         </div>
-      )
-    };
+      </div>
+    ),
+    intents: [<Button value="play">Next Match</Button>],
   };
+};
 
-  export const gameOver = (winnerName: string) => {
-    return {
-      action: `/game/:gameId/selectplay`,
-      image: (
+export const lost = (roundNumber: number, opponentName: string) => {
+  return {
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontSize: 60,
+          width: "100%",
+          height: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <HeroImage />
         <div
           style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-            fontSize: 30,
+            fontSize: 80,
+            marginTop: 0,
+            color: "#e59eff",
           }}
         >
-          <div>{`The game was won by ${winnerName}!`}</div>
+          ☹️
         </div>
-      )
-    };
+        <div
+          style={{
+            display: "flex",
+            fontSize: 30,
+            marginTop: 0,
+            color: "#e59eff",
+          }}
+        >{`You lost in round 1 to @${opponentName}`}</div>
+        <div
+          style={{
+            display: "flex",
+            fontSize: 30,
+            marginTop: 0,
+            color: "#e59eff",
+          }}
+        >
+          Better luck next game!
+        </div>
+      </div>
+    ),
   };
+};
+
+export const gameOver = (winnerName: string) => {
+  return {
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "white",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontSize: 60,
+          width: "100%",
+          height: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <HeroImage />
+        <div
+          style={{ fontSize: 30, color: "#e59eff" }}
+        >{`The game was won by @${winnerName}!`}</div>
+      </div>
+    ),
+  };
+};
+
+const HeroImage = () => (
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      fontSize: 60,
+      height: "50%",
+      marginTop: "60px",
+    }}
+  >
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: 60,
+        maxHeight: "100%",
+        maxWidth: "100%",
+        flexShrink: 1,
+      }}
+    >
+      <div style={{ color: "#ffb19f", margin: "0 10px" }}>Rock</div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/rock.svg"
+        alt="Rock"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          display: "block",
+          flexShrink: 1,
+          padding: "20px",
+        }}
+      />
+    </div>
+
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: 60,
+        maxHeight: "100%",
+        maxWidth: "100%",
+        flexShrink: 1,
+      }}
+    >
+      <div style={{ color: "#bcffbb", margin: "0 10px" }}>Pepe</div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/pepe.svg"
+        alt="Pepe"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          display: "block",
+          flexShrink: 1,
+          padding: "10px",
+        }}
+      />
+    </div>
+
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: 60,
+        maxHeight: "100%",
+        maxWidth: "100%",
+        flexShrink: 1,
+      }}
+    >
+      <div style={{ color: "#b3c8ff", margin: "0 10px" }}>Slizards</div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/slizards.svg"
+        alt="Pepe"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          display: "block",
+          flexShrink: 1,
+          padding: "40px",
+        }}
+      />
+    </div>
+  </div>
+);

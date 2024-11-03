@@ -1,14 +1,9 @@
 /* eslint-disable react/jsx-key */
 /** @jsxImportSource @airstack/frog/jsx */
-import { Button, Frog } from "@airstack/frog";
+import { Frog } from "@airstack/frog";
 import { handle } from "@airstack/frog/next";
 import { devtools } from "@airstack/frog/dev";
 import { serveStatic } from "@airstack/frog/serve-static";
-import {
-  getFarcasterUserDetails,
-  FarcasterUserDetailsInput,
-  FarcasterUserDetailsOutput,
-} from "@airstack/frog";
 import {
   fetchGameData,
   fetchUserData,
@@ -31,12 +26,29 @@ import {
   wonLastRound,
   played,
 } from "../../frames/frames";
+import { GameData } from "../../../types/types";
 
-const app = new Frog({
+type State = {
+  game: GameData | null;
+}
+
+const app = new Frog<{ State: State }>({ 
+  hub: {
+    apiUrl: "https://hubs.airstack.xyz",
+    fetchOptions: {
+      headers: {
+        "x-airstack-hubs": process.env.AIRSTACK_API_KEY as string,
+      }
+    }
+  },
   imageAspectRatio: "1:1",
+  //TODO: is this apiKey needed?
   apiKey: process.env.AIRSTACK_API_KEY as string,
   basePath: "/api",
   assetsPath: "/",
+  initialState: {
+    game: null,
+  },
 });
 
 app.frame("/game/:gameId", (c) => {
@@ -47,28 +59,25 @@ app.frame("/game/:gameId", (c) => {
 
 app.frame("/game/:gameId/play", async (c) => {
   const { gameId } = c.req.param();
-  const { frameData, verified } = c;
+  const { frameData, verified, deriveState } = c;
   const fid = frameData?.fid;
+
+  console.log("verified: ", verified);
 
   if (!fid) throw new Error("FID not found");
 
-  const userData = await fetchUserData(fid);
   const gameData = await fetchGameData(gameId, fid.toString());
-  const currentRoundNumber = gameData.rounds.find(
-    (round) => round.id === gameData.currentRoundId
-  )?.round_number;
+
+  deriveState(state => {
+    state.game = gameData;
+  });
+  
   const currentRound = gameData.rounds.find(
     (round) => round.id === gameData.currentRoundId
   );
 
-  console.log("fid: ", fid);
-  console.log("userData:", userData);
-  console.log("gameData:", gameData);
-  console.log("currentRoundNumber:", currentRoundNumber);
-
   if (gameData.gameState === 0) {
     // registration not started
-    console.log("registration not started");
     return c.res(registrationNotStarted());
   } else if (gameData.gameState === 1) {
     // registration is active
@@ -80,45 +89,67 @@ app.frame("/game/:gameId/play", async (c) => {
       return c.res(registered(gameId));
     } else {
       // user is not registered
-      return c.res(register(gameId));
+      return c.res(register(gameId, gameData.userName));
     }
   } else if (gameData.gameState === 2) {
     // game is active
-    console.log("currentRound: ", currentRound);
     if (currentRound.match && currentRound.match.playerMove !== null) {
       // player already played
-      return c.res(played(gameId, getMoveString(currentRound.match.playerMove)));
-    } else if (currentRoundNumber === 1) {
-      // round one
-      return c.res(roundOne(gameId));
-    } else if (!gameData.rounds[currentRoundNumber - 1].match) {
-      // user lost is last round or a previous round
-      const lastMatchAndRound = getUsersLastMatch(gameData);
+  
       return c.res(
-        lost(
-          lastMatchAndRound.roundLost,
-          lastMatchAndRound.match.opponentId.toString()
+        played(gameId, getMoveString(currentRound.match.playerMove))
+      );
+    } else if (currentRound.round_number === 1) {
+      // round one
+
+      const opponentData = await fetchUserData(currentRound.match.opponentId);
+      return c.res(
+        roundOne(
+          gameId,
+          currentRound.match.id.toString(),
+          gameData.userName,
+          opponentData ? opponentData.profileName : null
         )
       );
+    } else if (!gameData.rounds[currentRound.round_number - 1].match) {
+      // user lost in last round or a previous round
+
+      const lastMatchAndRound = getUsersLastMatch(gameData);
+      const opponentData = await fetchUserData(
+        lastMatchAndRound.match.opponentId
+      );
+
+      return c.res(lost(lastMatchAndRound.roundLost, opponentData.profileName));
     } else {
       // user is in the current round
+
+      const lastMatch = getUsersLastMatch(gameData);
+
+      const opponentName = lastMatch.match.opponentName
+        ? lastMatch.match.opponentName
+        : "null";
+
       return c.res(
         wonLastRound(
           gameId,
           currentRound.match.id.toString(),
-          currentRound.match.playerMove
+          gameData.userName,
+          opponentName,
+          lastMatch.match.playerMove
         )
       );
     }
   } else {
     // game is over
-    return c.res(gameOver(gameData.winnerId.toString()));
+
+    const winnerData = await fetchUserData(gameData.winnerId);
+    return c.res(gameOver(winnerData.profileName));
   }
 });
 
 app.frame("/game/:gameId/registered", async (c) => {
   const { gameId } = c.req.param();
-  const { frameData, verified } = c;
+  const { frameData } = c;
   const fid = frameData?.fid;
 
   await registerUserForGame(fid, Number(gameId));
@@ -126,63 +157,40 @@ app.frame("/game/:gameId/registered", async (c) => {
 });
 
 app.frame("/game/:gameId/:matchId/selectplay", async (c) => {
-  console.log("inside selectplay");
   const { gameId, matchId } = c.req.param();
-  const { frameData, verified } = c;
-  const { buttonValue, status } = c;
+  const { frameData, deriveState } = c;
   const fid = frameData?.fid;
 
   if (!fid) throw new Error();
 
-  const input: FarcasterUserDetailsInput = {
-    fid: fid,
-  };
+  let game: GameData;
+  deriveState(state => {
+    game = state.game;
+  });
 
-  const { data, error }: FarcasterUserDetailsOutput =
-    await getFarcasterUserDetails(input);
+  const currentRound = game.rounds.find(
+    (round) => round.id === game.currentRoundId
+  );
 
-  const profileName = data.profileName;
-
-  if (error) throw new Error(error);
-
-  return c.res(selectPlay(gameId, matchId, profileName));
+  return c.res(
+    selectPlay(
+      gameId,
+      matchId,
+      game.userName,
+      currentRound.round_number.toString(),
+      currentRound.match.opponentName ? currentRound.match.opponentName : null
+    )
+  );
 });
 
 app.frame("/game/:gameId/:matchId/played", async (c) => {
   const { gameId, matchId } = c.req.param();
-  const { frameData, verified } = c;
-  const { buttonValue, status } = c;
+  const { frameData, buttonValue } = c;
   const fid = frameData?.fid;
-
-  console.log("played buttonValue: ", buttonValue);
 
   await makePlay(Number(matchId), fid, getMoveNumber(buttonValue));
 
-  // return c.res(played(gameId, buttonValue));
-  return c.res(
-    {
-      image: (
-        <div
-          style={{
-            backgroundColor: "#2f0040",
-            color: "#e59eff",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            padding: "20px",
-            boxSizing: "border-box",
-            textAlign: "center",
-            fontSize: 30,
-          }}
-        >
-          <div>{`You played rock!`}</div>
-        </div>
-      )
-    }
-  );
+  return c.res(played(gameId, buttonValue));
 });
 
 devtools(app, { serveStatic });
