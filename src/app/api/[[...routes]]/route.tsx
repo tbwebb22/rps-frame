@@ -95,15 +95,14 @@ app.frame("/game/:gameId/play", async (c) => {
     // game is active
     if (currentRound.match && currentRound.match.playerMove !== null) {
       // player already played
+  
       return c.res(
         played(gameId, getMoveString(currentRound.match.playerMove))
       );
-      // TODO: add case for no opponent
     } else if (currentRound.round_number === 1) {
       // round one
-      console.log("getting opponent data");
+
       const opponentData = await fetchUserData(currentRound.match.opponentId);
-      console.log("opponentData: ", opponentData);
       return c.res(
         roundOne(
           gameId,
@@ -123,6 +122,7 @@ app.frame("/game/:gameId/play", async (c) => {
       return c.res(lost(lastMatchAndRound.roundLost, opponentData.profileName));
     } else {
       // user is in the current round
+
       const lastMatch = getUsersLastMatch(gameData);
 
       const opponentName = lastMatch.match.opponentName
@@ -141,6 +141,7 @@ app.frame("/game/:gameId/play", async (c) => {
     }
   } else {
     // game is over
+
     const winnerData = await fetchUserData(gameData.winnerId);
     return c.res(gameOver(winnerData.profileName));
   }
