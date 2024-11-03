@@ -101,8 +101,9 @@ app.frame("/game/:gameId/play", async (c) => {
       // TODO: add case for no opponent
     } else if (currentRound.round_number === 1) {
       // round one
+      console.log("getting opponent data");
       const opponentData = await fetchUserData(currentRound.match.opponentId);
-
+      console.log("opponentData: ", opponentData);
       return c.res(
         roundOne(
           gameId,
