@@ -443,7 +443,7 @@ export const lost = (roundNumber: number, opponentName: string) => {
   };
 };
 
-export const gameOver = (winnerName: string) => {
+export const gameOver = (gameId: string,winnerName: string) => {
   return {
     image: (
       <div
@@ -461,8 +461,11 @@ export const gameOver = (winnerName: string) => {
       >
         <HeroImage />
         <div
-          style={{ fontSize: 30, color: "#e59eff" }}
-        >{`The game was won by @${winnerName}!`}</div>
+          style={{ fontSize: 30, color: "#e59eff", marginTop: "80px" }}
+        >{`Tournament #${gameId}`}</div>
+        <div
+          style={{ fontSize: 30, color: "#e59eff", marginTop: "10px" }}
+        >{`was won by @${winnerName}!`}</div>
       </div>
     ),
   };

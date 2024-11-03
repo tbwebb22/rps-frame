@@ -143,7 +143,7 @@ app.frame("/game/:gameId/play", async (c) => {
     // game is over
 
     const winnerData = await fetchUserData(gameData.winnerId);
-    return c.res(gameOver(winnerData.profileName));
+    return c.res(gameOver(gameId, winnerData.profileName));
   }
 });
 
