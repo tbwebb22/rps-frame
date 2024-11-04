@@ -2,17 +2,19 @@ import { getFarcasterUserDetails, FarcasterUserDetailsOutput } from "@airstack/f
 import { GameData } from "../types/types";
 
 export async function fetchGameData(gameId: string, fid: string): Promise<GameData> {
-    const response = await fetch(
-        `http://localhost:3000/api/games/${gameId}/status/${fid}`,
-        {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }
-    );
+    const url = `${process.env.BACKEND_URL}/api/games/${gameId}/status/${fid}`;
+    const headers = {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.BACKEND_API_KEY || '',
+    };
+
+    const response = await fetch(url, {
+        method: "GET",
+        headers,
+    });
 
     if (!response.ok) {
+        console.log("HERE");
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 
@@ -33,11 +35,11 @@ export async function fetchUserData(fid: number | null) {
 }
 
 export async function registerUserForGame(fid: number, gameId: number): Promise<any> {
-    console.log(`registering user for game ${gameId} with fid ${fid}`);
-    const response = await fetch('http://localhost:3000/api/games/register', {
+    const response = await fetch(`${process.env.BACKEND_URL}/api/games/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            "x-api-key": process.env.BACKEND_API_KEY || '',
         },
         body: JSON.stringify({ fid, gameId }),
     });
@@ -50,11 +52,11 @@ export async function registerUserForGame(fid: number, gameId: number): Promise<
 }
 
 export async function makePlay(matchId: number, fid: number, move: number): Promise<any> {
-    console.log('body: ', JSON.stringify({ matchId, fid, move }));
-    const response = await fetch('http://localhost:3000/api/games/play', {
+    const response = await fetch(`${process.env.BACKEND_URL}/api/games/play`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            "x-api-key": process.env.BACKEND_API_KEY || '',
         },
         body: JSON.stringify({ matchId, fid, move }),
     });
@@ -68,7 +70,6 @@ export async function makePlay(matchId: number, fid: number, move: number): Prom
 
 export const getUsersLastMatch = (gameData: GameData) => {
     for (let i = gameData.rounds.length - 1; i >= 0; i--) {
-        // console.log("i: ", i, "undefined: ", gameData.rounds[i].match !== undefined);
         if (gameData.rounds[i].match && gameData.rounds[i].id !== gameData.currentRoundId) {
             return { match: gameData.rounds[i].match, roundLost: i + 1 };
         }

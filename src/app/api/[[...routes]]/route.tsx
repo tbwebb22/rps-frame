@@ -62,11 +62,13 @@ app.frame("/game/:gameId/play", async (c) => {
   const { frameData, verified, deriveState } = c;
   const fid = frameData?.fid;
 
-  console.log("verified: ", verified);
+  console.log(`FID: ${fid}, Verified: ${verified}`);
 
   if (!fid) throw new Error("FID not found");
 
   const gameData = await fetchGameData(gameId, fid.toString());
+
+  console.log("gameData: ", gameData);
 
   deriveState(state => {
     state.game = gameData;
