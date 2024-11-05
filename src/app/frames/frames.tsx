@@ -317,7 +317,7 @@ export const notRegistered = () => {
               color: "#e59eff",
             }}
           >
-            This game has started, but you're not registered ☹️
+            This game has started, but youre not registered ☹️
           </div>
           <div
             style={{
