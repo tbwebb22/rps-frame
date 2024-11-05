@@ -261,7 +261,6 @@ export const register = (gameId: string, userName: string) => {
 };
 
 export const registered = (gameId: string) => {
-  console.log("gameId: ", gameId);
   return {
     image: (
       <div
@@ -292,6 +291,48 @@ export const registered = (gameId: string) => {
     ),
   };
 };
+
+export const notRegistered = () => {
+    return {
+      image: (
+        <div
+          style={{
+            backgroundColor: "#2f0040",
+            color: "white",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            fontSize: 60,
+            width: "100%",
+            height: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          <HeroImage />
+          <div
+            style={{
+              display: "flex",
+              fontSize: 40,
+              marginTop: 50,
+              color: "#e59eff",
+            }}
+          >
+            This game has started, but youre not registered ☹️
+          </div>
+          <div
+            style={{
+              display: "flex",
+              fontSize: 40,
+              marginTop: 10,
+              color: "#e59eff",
+            }}
+          >
+            Please come back for the next game! 🙏
+          </div>
+        </div>
+      ),
+    };
+  };
 
 export const roundOne = (
   gameId: string,

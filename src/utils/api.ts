@@ -14,7 +14,6 @@ export async function fetchGameData(gameId: string, fid: string): Promise<GameDa
     });
 
     if (!response.ok) {
-        console.log("HERE");
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 
