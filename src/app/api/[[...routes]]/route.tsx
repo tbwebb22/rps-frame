@@ -25,21 +25,22 @@ import {
   gameOver,
   wonLastRound,
   played,
+  notVerified,
 } from "../../frames/frames";
 import { GameData } from "../../../types/types";
 
 type State = {
   game: GameData | null;
-}
+};
 
-const app = new Frog<{ State: State }>({ 
+const app = new Frog<{ State: State }>({
   hub: {
     apiUrl: "https://hubs.airstack.xyz",
     fetchOptions: {
       headers: {
         "x-airstack-hubs": process.env.AIRSTACK_API_KEY as string,
-      }
-    }
+      },
+    },
   },
   imageAspectRatio: "1:1",
   //TODO: is this apiKey needed?
@@ -70,15 +71,17 @@ app.frame("/game/:gameId/play", async (c) => {
 
   console.log("gameData: ", gameData);
 
-  deriveState(state => {
+  deriveState((state) => {
     state.game = gameData;
   });
-  
+
   const currentRound = gameData.rounds.find(
     (round) => round.id === gameData.currentRoundId
   );
 
-  if (gameData.gameState === 0) {
+  if ((process.env.VERIFY === "true" && !verified) || !fid) {
+    return c.res(notVerified());
+  } else if (gameData.gameState === 0) {
     // registration not started
     return c.res(registrationNotStarted());
   } else if (gameData.gameState === 1) {
@@ -97,7 +100,7 @@ app.frame("/game/:gameId/play", async (c) => {
     // game is active
     if (currentRound.match && currentRound.match.playerMove !== null) {
       // player already played
-  
+
       return c.res(
         played(gameId, getMoveString(currentRound.match.playerMove))
       );
@@ -151,8 +154,11 @@ app.frame("/game/:gameId/play", async (c) => {
 
 app.frame("/game/:gameId/registered", async (c) => {
   const { gameId } = c.req.param();
-  const { frameData } = c;
+  const { frameData, verified } = c;
   const fid = frameData?.fid;
+
+  if ((process.env.VERIFY === "true" && !verified) || !fid)
+    throw new Error("User not verified");
 
   await registerUserForGame(fid, Number(gameId));
   return c.res(registered(gameId));
@@ -160,13 +166,14 @@ app.frame("/game/:gameId/registered", async (c) => {
 
 app.frame("/game/:gameId/:matchId/selectplay", async (c) => {
   const { gameId, matchId } = c.req.param();
-  const { frameData, deriveState } = c;
+  const { frameData, verified, deriveState } = c;
   const fid = frameData?.fid;
 
-  if (!fid) throw new Error();
+  if ((process.env.VERIFY === "true" && !verified) || !fid)
+    throw new Error("User not verified");
 
   let game: GameData;
-  deriveState(state => {
+  deriveState((state) => {
     game = state.game;
   });
 

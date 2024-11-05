@@ -443,6 +443,45 @@ export const lost = (roundNumber: number, opponentName: string) => {
   };
 };
 
+export const notVerified = () => {
+    return {
+      image: (
+        <div
+          style={{
+            backgroundColor: "#2f0040",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            fontSize: 60,
+            width: "100%",
+            height: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          <HeroImage />
+          <div
+            style={{
+              display: "flex",
+              fontSize: 80,
+              marginTop: 0,
+              color: "#e59eff",
+            }}
+          >
+            ☹️
+          </div>
+          <div
+            style={{
+              display: "flex",
+              fontSize: 30,
+              marginTop: 0,
+              color: "#e59eff",
+            }}
+          >FID verification failed</div>
+        </div>
+      ),
+    };
+  };
+
 export const gameOver = (gameId: string,winnerName: string) => {
   return {
     image: (
