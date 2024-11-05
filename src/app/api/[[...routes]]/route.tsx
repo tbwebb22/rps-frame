@@ -25,6 +25,7 @@ import {
   gameOver,
   wonLastRound,
   played,
+  notVerified,
 } from "../../frames/frames";
 import { GameData } from "../../../types/types";
 
@@ -78,7 +79,9 @@ app.frame("/game/:gameId/play", async (c) => {
     (round) => round.id === gameData.currentRoundId
   );
 
-  if (gameData.gameState === 0) {
+  if (!verified || !fid) {
+    return c.res(notVerified());
+  } else if (gameData.gameState === 0) {
     // registration not started
     return c.res(registrationNotStarted());
   } else if (gameData.gameState === 1) {
@@ -151,8 +154,10 @@ app.frame("/game/:gameId/play", async (c) => {
 
 app.frame("/game/:gameId/registered", async (c) => {
   const { gameId } = c.req.param();
-  const { frameData } = c;
+  const { frameData, verified } = c;
   const fid = frameData?.fid;
+
+  if (!verified || !fid) throw new Error("User not verified");
 
   await registerUserForGame(fid, Number(gameId));
   return c.res(registered(gameId));
@@ -160,10 +165,10 @@ app.frame("/game/:gameId/registered", async (c) => {
 
 app.frame("/game/:gameId/:matchId/selectplay", async (c) => {
   const { gameId, matchId } = c.req.param();
-  const { frameData, deriveState } = c;
+  const { frameData, verified,deriveState } = c;
   const fid = frameData?.fid;
 
-  if (!fid) throw new Error();
+  if (!verified || !fid) throw new Error("User not verified");
 
   let game: GameData;
   deriveState(state => {
