@@ -26,6 +26,7 @@ import {
   wonLastRound,
   played,
   notVerified,
+  notRegistered,
 } from "../../frames/frames";
 import { GameData } from "../../../types/types";
 
@@ -98,7 +99,11 @@ app.frame("/game/:gameId/play", async (c) => {
     }
   } else if (gameData.gameState === 2) {
     // game is active
-    if (currentRound.match && currentRound.match.playerMove !== null) {
+    if (!getUsersLastMatch(gameData)) {
+      // user is not registered
+
+      return c.res(notRegistered());
+    } else if (currentRound.match && currentRound.match.playerMove !== null) {
       // player already played
 
       return c.res(
