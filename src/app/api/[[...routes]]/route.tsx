@@ -44,7 +44,6 @@ const app = new Frog<{ State: State }>({
     },
   },
   imageAspectRatio: "1:1",
-  //TODO: is this apiKey needed?
   apiKey: process.env.AIRSTACK_API_KEY as string,
   basePath: "/api",
   assetsPath: "/",

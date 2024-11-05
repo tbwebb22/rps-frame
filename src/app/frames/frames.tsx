@@ -261,7 +261,6 @@ export const register = (gameId: string, userName: string) => {
 };
 
 export const registered = (gameId: string) => {
-  console.log("gameId: ", gameId);
   return {
     image: (
       <div
