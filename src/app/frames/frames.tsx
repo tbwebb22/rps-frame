@@ -260,10 +260,9 @@ export const register = (gameId: string, userName: string) => {
         <div style={{ display: "flex", fontSize: 40, color: "#e59eff" }}>
           Register below to play
         </div>
-        {/* <div style={{ fontSize: 40, color: "#e59eff" }}>Win 10,000 MOXIE</div> */}
       </div>
     ),
-    intents: [<Button value="register">register</Button>],
+    intents: [<Button value="register">Register</Button>],
   };
 };
 
@@ -397,7 +396,7 @@ export const roundOne = (
         </div>
       </div>
     ),
-    intents: [<Button value="play">play</Button>],
+    intents: [<Button value="play">Play</Button>],
   };
 };
 
