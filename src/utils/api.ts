@@ -83,3 +83,9 @@ export const getMoveString = (move: number) => {
 export const getMoveNumber = (move: string) => {
     return move === "Rock" ? 0 : move === "Pepe" ? 1 : 2;
 }
+
+export const isUserInFirstRound = (gameData: GameData) => {
+    return (
+        gameData.rounds?.[0]?.match != null
+    );
+}

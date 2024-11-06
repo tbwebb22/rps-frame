@@ -12,6 +12,7 @@ import {
   registerUserForGame,
   getMoveString,
   getMoveNumber,
+  isUserInFirstRound,
 } from "../../../utils/api";
 import {
   homeFrame,
@@ -98,7 +99,7 @@ app.frame("/game/:gameId/play", async (c) => {
     }
   } else if (gameData.gameState === 2) {
     // game is active
-    if (!getUsersLastMatch(gameData)) {
+    if (!isUserInFirstRound(gameData)) {
       // user is not registered
 
       return c.res(notRegistered());
