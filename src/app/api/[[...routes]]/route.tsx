@@ -92,7 +92,8 @@ app.frame("/game/:gameId/play", async (c) => {
       return c.res(registrationFull());
     } else if (gameData.userRegistered) {
       // user is already registered
-      return c.res(registered(gameId));
+
+      return c.res(registered(gameId, gameData.gameStart));
     } else {
       // user is not registered
       return c.res(register(gameId, gameData.userName));
@@ -107,7 +108,7 @@ app.frame("/game/:gameId/play", async (c) => {
       // player already played
 
       return c.res(
-        played(gameId, getMoveString(currentRound.match.playerMove))
+        played(gameId, currentRound.end_time, getMoveString(currentRound.match.playerMove))
       );
     } else if (currentRound.round_number === 1) {
       // round one
@@ -159,14 +160,19 @@ app.frame("/game/:gameId/play", async (c) => {
 
 app.frame("/game/:gameId/registered", async (c) => {
   const { gameId } = c.req.param();
-  const { frameData, verified } = c;
+  const { frameData, verified, deriveState } = c;
   const fid = frameData?.fid;
 
   if ((process.env.VERIFY === "true" && !verified) || !fid)
     throw new Error("User not verified");
 
+  let game: GameData;
+  deriveState((state) => {
+    game = state.game;
+  });
+
   await registerUserForGame(fid, Number(gameId));
-  return c.res(registered(gameId));
+  return c.res(registered(gameId, game.gameStart));
 });
 
 app.frame("/game/:gameId/:matchId/selectplay", async (c) => {
@@ -199,12 +205,24 @@ app.frame("/game/:gameId/:matchId/selectplay", async (c) => {
 
 app.frame("/game/:gameId/:matchId/played", async (c) => {
   const { gameId, matchId } = c.req.param();
-  const { frameData, buttonValue } = c;
+  const { frameData, buttonValue, verified, deriveState } = c;
   const fid = frameData?.fid;
+
+  if ((process.env.VERIFY === "true" && !verified) || !fid)
+    throw new Error("User not verified");
+
+  let game: GameData;
+  deriveState((state) => {
+    game = state.game;
+  });
 
   await makePlay(Number(matchId), fid, getMoveNumber(buttonValue));
 
-  return c.res(played(gameId, buttonValue));
+  const currentRound = game.rounds.find(
+    (round) => round.id === game.currentRoundId
+  );
+
+  return c.res(played(gameId, currentRound.end_time, buttonValue));
 });
 
 devtools(app, { serveStatic });

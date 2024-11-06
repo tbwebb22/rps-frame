@@ -108,7 +108,14 @@ export const selectPlay = (
   };
 };
 
-export const played = (gameId: string, playerMove: string) => {
+export const played = (
+  gameId: string,
+  gameStartString: string,
+  playerMove: string
+) => {
+  const now = new Date().getTime();
+  const gameStartTime = new Date(gameStartString).getTime();
+  const minutesUntilStart = Math.floor((gameStartTime - now) / (1000 * 60));
   let imgSrc;
   if (playerMove === "Rock") {
     imgSrc = "/rock.svg";
@@ -148,10 +155,10 @@ export const played = (gameId: string, playerMove: string) => {
           }}
         />
         <div style={{ fontSize: 30, color: "#e59eff" }}>
-          Thanks for playing!
+          {`You played ${playerMove}!`}
         </div>
         <div style={{ fontSize: 30, color: "#e59eff" }}>
-          Check back soon for the next round
+          {`Next match in ${minutesUntilStart} minutes`}
         </div>
       </div>
     ),
@@ -260,7 +267,10 @@ export const register = (gameId: string, userName: string) => {
   };
 };
 
-export const registered = (gameId: string) => {
+export const registered = (gameId: string, gameStartString: string) => {
+  const now = new Date().getTime();
+  const gameStartTime = new Date(gameStartString).getTime();
+  const minutesUntilStart = Math.floor((gameStartTime - now) / (1000 * 60));
   return {
     image: (
       <div
@@ -285,54 +295,62 @@ export const registered = (gameId: string) => {
             color: "#e59eff",
           }}
         >
-          Thanks for registering!
+          You're registered 👍
         </div>
+        <div
+          style={{
+            display: "flex",
+            fontSize: 40,
+            marginTop: 10,
+            color: "#e59eff",
+          }}
+        >{`The game starts in ${minutesUntilStart} minutes!`}</div>
       </div>
     ),
   };
 };
 
 export const notRegistered = () => {
-    return {
-      image: (
+  return {
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          color: "white",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontSize: 60,
+          width: "100%",
+          height: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <HeroImage />
         <div
           style={{
-            backgroundColor: "#2f0040",
-            color: "white",
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            fontSize: 60,
-            width: "100%",
-            height: "100%",
-            boxSizing: "border-box",
+            fontSize: 40,
+            marginTop: 50,
+            color: "#e59eff",
           }}
         >
-          <HeroImage />
-          <div
-            style={{
-              display: "flex",
-              fontSize: 40,
-              marginTop: 50,
-              color: "#e59eff",
-            }}
-          >
-            This game has started, but youre not registered ☹️
-          </div>
-          <div
-            style={{
-              display: "flex",
-              fontSize: 40,
-              marginTop: 10,
-              color: "#e59eff",
-            }}
-          >
-            Please come back for the next game! 🙏
-          </div>
+          This game has started, but youre not registered ☹️
         </div>
-      ),
-    };
+        <div
+          style={{
+            display: "flex",
+            fontSize: 40,
+            marginTop: 10,
+            color: "#e59eff",
+          }}
+        >
+          Please come back for the next game! 🙏
+        </div>
+      </div>
+    ),
   };
+};
 
 export const roundOne = (
   gameId: string,
@@ -485,45 +503,47 @@ export const lost = (roundNumber: number, opponentName: string) => {
 };
 
 export const notVerified = () => {
-    return {
-      image: (
+  return {
+    image: (
+      <div
+        style={{
+          backgroundColor: "#2f0040",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontSize: 60,
+          width: "100%",
+          height: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <HeroImage />
         <div
           style={{
-            backgroundColor: "#2f0040",
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            fontSize: 60,
-            width: "100%",
-            height: "100%",
-            boxSizing: "border-box",
+            fontSize: 80,
+            marginTop: 0,
+            color: "#e59eff",
           }}
         >
-          <HeroImage />
-          <div
-            style={{
-              display: "flex",
-              fontSize: 80,
-              marginTop: 0,
-              color: "#e59eff",
-            }}
-          >
-            ☹️
-          </div>
-          <div
-            style={{
-              display: "flex",
-              fontSize: 30,
-              marginTop: 0,
-              color: "#e59eff",
-            }}
-          >FID verification failed</div>
+          ☹️
         </div>
-      ),
-    };
+        <div
+          style={{
+            display: "flex",
+            fontSize: 30,
+            marginTop: 0,
+            color: "#e59eff",
+          }}
+        >
+          FID verification failed
+        </div>
+      </div>
+    ),
   };
+};
 
-export const gameOver = (gameId: string,winnerName: string) => {
+export const gameOver = (gameId: string, winnerName: string) => {
   return {
     image: (
       <div
