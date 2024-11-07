@@ -252,12 +252,12 @@ export const register = (gameId: string, userName: string) => {
         <div
           style={{
             display: "flex",
-            fontSize: 40,
+            fontSize: 30,
             marginTop: 50,
             color: "#e59eff",
           }}
         >{`Welcome ${userName}!`}</div>
-        <div style={{ display: "flex", fontSize: 40, color: "#e59eff" }}>
+        <div style={{ display: "flex", fontSize: 30, color: "#e59eff" }}>
           Register below to play
         </div>
       </div>
@@ -289,7 +289,7 @@ export const registered = (gameId: string, gameStartString: string) => {
         <div
           style={{
             display: "flex",
-            fontSize: 40,
+            fontSize: 30,
             marginTop: 50,
             color: "#e59eff",
           }}
@@ -299,7 +299,7 @@ export const registered = (gameId: string, gameStartString: string) => {
         <div
           style={{
             display: "flex",
-            fontSize: 40,
+            fontSize: 30,
             marginTop: 10,
             color: "#e59eff",
           }}
@@ -329,17 +329,27 @@ export const notRegistered = () => {
         <div
           style={{
             display: "flex",
-            fontSize: 40,
+            fontSize: 30,
             marginTop: 50,
             color: "#e59eff",
           }}
         >
-          This game has started, but youre not registered ☹️
+          This game has started, 
         </div>
         <div
           style={{
             display: "flex",
-            fontSize: 40,
+            fontSize: 30,
+            marginTop: 10,
+            color: "#e59eff",
+          }}
+        >
+          but youre not registered ☹️
+        </div>
+        <div
+          style={{
+            display: "flex",
+            fontSize: 30,
             marginTop: 10,
             color: "#e59eff",
           }}
