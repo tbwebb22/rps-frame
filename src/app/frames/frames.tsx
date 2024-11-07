@@ -344,7 +344,7 @@ export const notRegistered = () => {
             color: "#e59eff",
           }}
         >
-          but youre not registered ☹️
+          but you are not registered.
         </div>
         <div
           style={{
