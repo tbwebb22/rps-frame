@@ -294,7 +294,7 @@ export const registered = (gameId: string, gameStartString: string) => {
             color: "#e59eff",
           }}
         >
-          You&apos;re Registered 🎉
+          You\u0027re Registered 🎉
         </div>
         <div
           style={{
@@ -402,7 +402,7 @@ export const roundOne = (
             color: "#e59eff",
           }}
         >
-          {`You&apos;re matched up against ${opponentName}!`}
+          {`You\u0027re matched up against ${opponentName}!`}
         </div>
       </div>
     ),
