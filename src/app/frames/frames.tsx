@@ -294,7 +294,7 @@ export const registered = (gameId: string, gameStartString: string) => {
             color: "#e59eff",
           }}
         >
-          You are Registered 🎉
+          You are registered 🎉
         </div>
         <div
           style={{
