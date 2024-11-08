@@ -217,15 +217,22 @@ export const registrationFull = () => {
         <HeroImage />
         <div
           style={{
-            fontSize: "30px",
-            lineHeight: 1.2,
-            wordBreak: "break-word",
-            whiteSpace: "pre-wrap",
-            maxWidth: "100%",
+            display: "flex",
+            fontSize: 30,
+            marginTop: 50,
+            color: "#e59eff",
           }}
         >
-          {`Registration is full!\nCheck back soon for the next game!`}
+          Registration is full
         </div>
+        <div
+          style={{
+            display: "flex",
+            fontSize: 30,
+            marginTop: 10,
+            color: "#e59eff",
+          }}
+        >Please come back for the next game! 🙏</div>
       </div>
     ),
   };
