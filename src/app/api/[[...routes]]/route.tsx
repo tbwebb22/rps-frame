@@ -87,13 +87,12 @@ app.frame("/game/:gameId/play", async (c) => {
     return c.res(registrationNotStarted());
   } else if (gameData.gameState === 1) {
     // registration is active
-    if (gameData.currentRegistrations >= gameData.maxRegistrations) {
+    if (gameData.userRegistered) {
+      // user is already registered
+      return c.res(registered(gameId, gameData.gameStart));
+    } else if (gameData.currentRegistrations >= gameData.maxRegistrations) {
       // registration is full
       return c.res(registrationFull());
-    } else if (gameData.userRegistered) {
-      // user is already registered
-
-      return c.res(registered(gameId, gameData.gameStart));
     } else {
       // user is not registered
       return c.res(register(gameId, gameData.userName));
@@ -108,7 +107,11 @@ app.frame("/game/:gameId/play", async (c) => {
       // player already played
 
       return c.res(
-        played(gameId, currentRound.end_time, getMoveString(currentRound.match.playerMove))
+        played(
+          gameId,
+          currentRound.end_time,
+          getMoveString(currentRound.match.playerMove)
+        )
       );
     } else if (currentRound.round_number === 1) {
       // round one
