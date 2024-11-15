@@ -13,6 +13,7 @@ import {
   getMoveString,
   getMoveNumber,
   isUserInFirstRound,
+  followsReferee,
 } from "../../../utils/api";
 import {
   homeFrame,
@@ -65,6 +66,8 @@ app.frame("/game/:gameId/play", async (c) => {
   const fid = frameData?.fid;
 
   console.log(`FID: ${fid}, Verified: ${verified}`);
+
+  await followsReferee(fid);
 
   if (!fid) throw new Error("FID not found");
 

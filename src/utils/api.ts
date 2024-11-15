@@ -1,4 +1,15 @@
-import { getFarcasterUserDetails, FarcasterUserDetailsOutput } from "@airstack/frog";
+import {
+    getFarcasterUserDetails,
+    FarcasterUserDetailsOutput,
+    CheckIsFollowedByFarcasterUserInput,
+    CheckIsFollowedByFarcasterUserOutput,
+    checkIsFollowedByFarcasterUser,
+} from "@airstack/frog";
+import {
+    checkIsFollowingFarcasterUser,
+    CheckIsFollowingFarcasterUserInput,
+    CheckIsFollowingFarcasterUserOutput,
+  } from "@airstack/frames";
 import { GameData } from "../types/types";
 
 export async function fetchGameData(gameId: string, fid: string): Promise<GameData> {
@@ -28,9 +39,28 @@ export async function fetchUserData(fid: number | null) {
             fid: fid,
         });
 
-    if (error) throw new Error(error);
+    if (error) {
+        console.error('Full error:', error);
+        throw new Error(JSON.stringify(error, null, 2));
+    }
 
     return data;
+}
+
+export async function followsReferee(fid: number) {
+    const input: CheckIsFollowedByFarcasterUserInput = {
+        fid: 602,
+        isFollowedBy: [2602, 15971, 13242],
+      };
+      const { data, error }: CheckIsFollowedByFarcasterUserOutput =
+        await checkIsFollowedByFarcasterUser(input);
+
+    if (error) {
+        console.error('Full error:', error);
+        throw new Error(JSON.stringify(error, null, 2));
+    }
+
+    console.log('follows referee: ', data);
 }
 
 export async function registerUserForGame(fid: number, gameId: number): Promise<any> {
