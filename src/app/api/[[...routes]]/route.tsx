@@ -51,6 +51,15 @@ const app = new Frog<{ State: State }>({
   initialState: {
     game: null,
   },
+  imageOptions: {
+    fonts: [
+      {
+        name: 'Anton',
+        weight: 400,
+        source: 'google',
+      },
+    ],
+  },
 });
 
 app.frame("/game/:gameId", (c) => {

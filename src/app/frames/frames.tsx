@@ -8,6 +8,7 @@ export const homeFrame = (gameId: string) => {
     image: (
       <div
         style={{
+          fontFamily: "Anton",
           backgroundColor: "#2f0040",
           color: "white",
           display: "flex",
@@ -45,6 +46,7 @@ export const selectPlay = (
     image: (
       <div
         style={{
+          fontFamily: "Anton",
           backgroundColor: "#2f0040",
           color: "#e59eff",
           display: "flex",
@@ -128,6 +130,7 @@ export const played = (
     image: (
       <div
         style={{
+          fontFamily: "Anton",
           backgroundColor: "#2f0040",
           color: "#e59eff",
           display: "flex",
@@ -170,6 +173,7 @@ export const registrationNotStarted = () => {
     image: (
       <div
         style={{
+          fontFamily: "Anton",
           backgroundColor: "#2f0040",
           color: "white",
           display: "flex",
@@ -203,6 +207,7 @@ export const registrationFull = () => {
     image: (
       <div
         style={{
+          fontFamily: "Anton",
           backgroundColor: "#2f0040",
           color: "white",
           display: "flex",
@@ -232,7 +237,9 @@ export const registrationFull = () => {
             marginTop: 10,
             color: "#e59eff",
           }}
-        >Please come back for the next game! 🙏</div>
+        >
+          Please come back for the next game! 🙏
+        </div>
       </div>
     ),
   };
@@ -244,6 +251,7 @@ export const register = (gameId: string, userName: string) => {
     image: (
       <div
         style={{
+          fontFamily: "Anton",
           backgroundColor: "#2f0040",
           color: "white",
           display: "flex",
@@ -281,6 +289,7 @@ export const registered = (gameId: string, gameStartString: string) => {
     image: (
       <div
         style={{
+          fontFamily: "Anton",
           backgroundColor: "#2f0040",
           color: "white",
           display: "flex",
@@ -321,6 +330,7 @@ export const notRegistered = () => {
     image: (
       <div
         style={{
+          fontFamily: "Anton",
           backgroundColor: "#2f0040",
           color: "white",
           display: "flex",
@@ -341,7 +351,7 @@ export const notRegistered = () => {
             color: "#e59eff",
           }}
         >
-          This game has started, 
+          This game has started,
         </div>
         <div
           style={{
@@ -379,6 +389,7 @@ export const roundOne = (
     image: (
       <div
         style={{
+          fontFamily: "Anton",
           backgroundColor: "#2f0040",
           color: "white",
           display: "flex",
@@ -429,6 +440,7 @@ export const wonLastRound = (
     image: (
       <div
         style={{
+          fontFamily: "Anton",
           backgroundColor: "#2f0040",
           color: "white",
           display: "flex",
@@ -474,6 +486,7 @@ export const lost = (roundNumber: number, opponentName: string) => {
     image: (
       <div
         style={{
+          fontFamily: "Anton",
           backgroundColor: "#2f0040",
           display: "flex",
           flexDirection: "column",
@@ -523,6 +536,7 @@ export const notVerified = () => {
     image: (
       <div
         style={{
+          fontFamily: "Anton",
           backgroundColor: "#2f0040",
           display: "flex",
           flexDirection: "column",
@@ -564,6 +578,7 @@ export const gameOver = (gameId: string, winnerName: string) => {
     image: (
       <div
         style={{
+          fontFamily: "Anton",
           backgroundColor: "#2f0040",
           color: "white",
           display: "flex",
@@ -590,6 +605,7 @@ export const gameOver = (gameId: string, winnerName: string) => {
 const HeroImage = () => (
   <div
     style={{
+      fontFamily: "Anton",
       display: "flex",
       flexDirection: "row",
       justifyContent: "center",
