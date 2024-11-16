@@ -2,6 +2,9 @@
 /** @jsxImportSource @airstack/frog/jsx */
 import { Button, Frog } from "@airstack/frog";
 
+const backgroundColor = "#16101e";
+const fontColor = "#c282ff";
+
 export const homeFrame = (gameId: string) => {
   return {
     action: `/game/${gameId}/play`,
@@ -9,8 +12,8 @@ export const homeFrame = (gameId: string) => {
       <div
         style={{
           fontFamily: "Anton",
-          backgroundColor: "#2f0040",
-          color: "white",
+          backgroundColor,
+          color: fontColor,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -21,13 +24,13 @@ export const homeFrame = (gameId: string) => {
         }}
       >
         <HeroImage />
-        <div style={{ fontSize: 40, marginTop: 50, color: "#e59eff" }}>
+        <div style={{ fontSize: 40, marginTop: 50 }}>
           Free to play
         </div>
-        <div style={{ fontSize: 40, color: "#e59eff" }}>
+        <div style={{ fontSize: 40 }}>
           {`Tournament #${gameId}`}
         </div>
-        {/* <div style={{ fontSize: 40, color: "#e59eff" }}>Win MOXIE</div> */}
+        {/* <div style={{ fontSize: 40 }}>Win MOXIE</div> */}
       </div>
     ),
     intents: [<Button>Play</Button>],
@@ -633,12 +636,13 @@ const HeroImage = () => (
         src="/rock.svg"
         alt="Rock"
         style={{
-          width: "100%",
-          height: "100%",
+          width: "105%",
+          height: "105%",
           objectFit: "contain",
           display: "block",
           flexShrink: 1,
           padding: "20px",
+          marginLeft: "-10px",
         }}
       />
     </div>
@@ -689,12 +693,14 @@ const HeroImage = () => (
         src="/slizards.svg"
         alt="Pepe"
         style={{
-          width: "100%",
-          height: "100%",
+          width: "108%",
+          height: "108%",
           objectFit: "contain",
           display: "block",
           flexShrink: 1,
           padding: "40px",
+          marginTop: "30px",
+          marginLeft: "-10px",
         }}
       />
     </div>
