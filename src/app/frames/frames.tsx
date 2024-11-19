@@ -30,7 +30,6 @@ export const homeFrame = (gameId: string) => {
         <div style={{ fontSize: 40 }}>
           {`Tournament #${gameId}`}
         </div>
-        {/* <div style={{ fontSize: 40 }}>Win MOXIE</div> */}
       </div>
     ),
     intents: [<Button>Play</Button>],
@@ -50,8 +49,8 @@ export const selectPlay = (
       <div
         style={{
           fontFamily: "Anton",
-          backgroundColor: "#2f0040",
-          color: "#e59eff",
+          backgroundColor,
+          color: fontColor,
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -65,19 +64,19 @@ export const selectPlay = (
         }}
       >
         <div
-          style={{ fontSize: 60, marginTop: 0, color: "#e59eff" }}
+          style={{ fontSize: 60, marginTop: 0 }}
         >{`Round ${roundNumber}`}</div>
         <div
-          style={{ fontSize: 40, marginTop: 30, color: "#e59eff" }}
+          style={{ fontSize: 40, marginTop: 30 }}
         >{`${profileName}`}</div>
         <div
-          style={{ fontSize: 40, marginTop: 0, color: "#e59eff" }}
+          style={{ fontSize: 40, marginTop: 0 }}
         >{`vs`}</div>
         <div
-          style={{ fontSize: 40, marginTop: 0, color: "#e59eff" }}
+          style={{ fontSize: 40, marginTop: 0 }}
         >{`${opponentName}`}</div>
         <div
-          style={{ fontSize: 40, marginTop: 40, color: "#e59eff" }}
+          style={{ fontSize: 40, marginTop: 40 }}
         >{`Select your move`}</div>
         <div
           style={{
@@ -92,7 +91,7 @@ export const selectPlay = (
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/rpsMoves2.svg"
+            src="/rpsMoves.svg"
             alt="Pepe"
             style={{
               maxWidth: "100%",
@@ -134,8 +133,8 @@ export const played = (
       <div
         style={{
           fontFamily: "Anton",
-          backgroundColor: "#2f0040",
-          color: "#e59eff",
+          backgroundColor,
+          color: fontColor,
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -160,10 +159,10 @@ export const played = (
             padding: "20px",
           }}
         />
-        <div style={{ fontSize: 30, color: "#e59eff" }}>
+        <div style={{ fontSize: 30 }}>
           {`You played ${playerMove}!`}
         </div>
-        <div style={{ fontSize: 30, color: "#e59eff" }}>
+        <div style={{ fontSize: 30 }}>
           {`Next match in ${minutesUntilStart} minutes`}
         </div>
       </div>
@@ -177,8 +176,8 @@ export const registrationNotStarted = () => {
       <div
         style={{
           fontFamily: "Anton",
-          backgroundColor: "#2f0040",
-          color: "white",
+          backgroundColor,
+          color: fontColor,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -211,8 +210,8 @@ export const registrationFull = () => {
       <div
         style={{
           fontFamily: "Anton",
-          backgroundColor: "#2f0040",
-          color: "white",
+          backgroundColor,
+          color: fontColor,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -228,7 +227,6 @@ export const registrationFull = () => {
             display: "flex",
             fontSize: 30,
             marginTop: 50,
-            color: "#e59eff",
           }}
         >
           Registration is full
@@ -238,7 +236,6 @@ export const registrationFull = () => {
             display: "flex",
             fontSize: 30,
             marginTop: 10,
-            color: "#e59eff",
           }}
         >
           Please come back for the next game! 🙏
@@ -255,8 +252,8 @@ export const register = (gameId: string, userName: string) => {
       <div
         style={{
           fontFamily: "Anton",
-          backgroundColor: "#2f0040",
-          color: "white",
+          backgroundColor,
+          color: fontColor,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -272,10 +269,9 @@ export const register = (gameId: string, userName: string) => {
             display: "flex",
             fontSize: 30,
             marginTop: 50,
-            color: "#e59eff",
           }}
         >{`Welcome ${userName}!`}</div>
-        <div style={{ display: "flex", fontSize: 30, color: "#e59eff" }}>
+        <div style={{ display: "flex", fontSize: 30 }}>
           Register below to play
         </div>
       </div>
@@ -293,8 +289,8 @@ export const registered = (gameId: string, gameStartString: string) => {
       <div
         style={{
           fontFamily: "Anton",
-          backgroundColor: "#2f0040",
-          color: "white",
+          backgroundColor,
+          color: fontColor,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -310,7 +306,6 @@ export const registered = (gameId: string, gameStartString: string) => {
             display: "flex",
             fontSize: 30,
             marginTop: 50,
-            color: "#e59eff",
           }}
         >
           You are registered 🎉
@@ -320,7 +315,6 @@ export const registered = (gameId: string, gameStartString: string) => {
             display: "flex",
             fontSize: 30,
             marginTop: 10,
-            color: "#e59eff",
           }}
         >{`The game starts in ${minutesUntilStart} minutes!`}</div>
       </div>
@@ -334,8 +328,8 @@ export const notRegistered = () => {
       <div
         style={{
           fontFamily: "Anton",
-          backgroundColor: "#2f0040",
-          color: "white",
+          backgroundColor,
+          color: fontColor,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -351,7 +345,6 @@ export const notRegistered = () => {
             display: "flex",
             fontSize: 30,
             marginTop: 50,
-            color: "#e59eff",
           }}
         >
           This game has started,
@@ -361,7 +354,6 @@ export const notRegistered = () => {
             display: "flex",
             fontSize: 30,
             marginTop: 10,
-            color: "#e59eff",
           }}
         >
           but you are not registered.
@@ -371,7 +363,6 @@ export const notRegistered = () => {
             display: "flex",
             fontSize: 30,
             marginTop: 10,
-            color: "#e59eff",
           }}
         >
           Please come back for the next game! 🙏
@@ -393,8 +384,8 @@ export const roundOne = (
       <div
         style={{
           fontFamily: "Anton",
-          backgroundColor: "#2f0040",
-          color: "white",
+          backgroundColor,
+          color: fontColor,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -410,7 +401,6 @@ export const roundOne = (
             display: "flex",
             fontSize: 30,
             marginTop: 50,
-            color: "#e59eff",
           }}
         >
           {`Welcome to round 1 ${userName}!`}
@@ -420,7 +410,6 @@ export const roundOne = (
             display: "flex",
             fontSize: 30,
             marginTop: 0,
-            color: "#e59eff",
           }}
         >
           {`You are matched up against ${opponentName}!`}
@@ -444,8 +433,8 @@ export const wonLastRound = (
       <div
         style={{
           fontFamily: "Anton",
-          backgroundColor: "#2f0040",
-          color: "white",
+          backgroundColor,
+          color: fontColor,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -461,7 +450,6 @@ export const wonLastRound = (
             display: "flex",
             fontSize: 30,
             marginTop: 50,
-            color: "#e59eff",
           }}
         >
           {`Congratulations ${userName}!`}
@@ -471,7 +459,6 @@ export const wonLastRound = (
             display: "flex",
             fontSize: 30,
             marginTop: 0,
-            color: "#e59eff",
           }}
         >
           {opponentName
@@ -490,7 +477,8 @@ export const lost = (roundNumber: number, opponentName: string) => {
       <div
         style={{
           fontFamily: "Anton",
-          backgroundColor: "#2f0040",
+          backgroundColor,
+          color: fontColor,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -506,7 +494,6 @@ export const lost = (roundNumber: number, opponentName: string) => {
             display: "flex",
             fontSize: 80,
             marginTop: 0,
-            color: "#e59eff",
           }}
         >
           ☹️
@@ -516,7 +503,6 @@ export const lost = (roundNumber: number, opponentName: string) => {
             display: "flex",
             fontSize: 30,
             marginTop: 0,
-            color: "#e59eff",
           }}
         >{`You lost in round 1 to @${opponentName}`}</div>
         <div
@@ -524,7 +510,6 @@ export const lost = (roundNumber: number, opponentName: string) => {
             display: "flex",
             fontSize: 30,
             marginTop: 0,
-            color: "#e59eff",
           }}
         >
           Better luck next game!
@@ -540,7 +525,8 @@ export const notVerified = () => {
       <div
         style={{
           fontFamily: "Anton",
-          backgroundColor: "#2f0040",
+          backgroundColor,
+          color: fontColor,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -556,7 +542,6 @@ export const notVerified = () => {
             display: "flex",
             fontSize: 80,
             marginTop: 0,
-            color: "#e59eff",
           }}
         >
           ☹️
@@ -566,7 +551,6 @@ export const notVerified = () => {
             display: "flex",
             fontSize: 30,
             marginTop: 0,
-            color: "#e59eff",
           }}
         >
           FID verification failed
@@ -582,8 +566,8 @@ export const gameOver = (gameId: string, winnerName: string) => {
       <div
         style={{
           fontFamily: "Anton",
-          backgroundColor: "#2f0040",
-          color: "white",
+          backgroundColor,
+          color: fontColor,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -595,11 +579,11 @@ export const gameOver = (gameId: string, winnerName: string) => {
       >
         <HeroImage />
         <div
-          style={{ fontSize: 30, color: "#e59eff", marginTop: "80px" }}
-        >{`Tournament #${gameId}`}</div>
+          style={{ fontSize: 30, marginTop: "80px" }}
+        >{`This tournament has ended`}</div>
         <div
-          style={{ fontSize: 30, color: "#e59eff", marginTop: "10px" }}
-        >{`was won by @${winnerName}!`}</div>
+          style={{ fontSize: 30, marginTop: "10px" }}
+        >{`@${winnerName} won it all!`}</div>
       </div>
     ),
   };
@@ -609,6 +593,8 @@ const HeroImage = () => (
   <div
     style={{
       fontFamily: "Anton",
+      backgroundColor,
+      color: fontColor,
       display: "flex",
       flexDirection: "row",
       justifyContent: "center",
