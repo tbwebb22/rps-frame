@@ -70,7 +70,7 @@ export async function makePlay(matchId: number, fid: number, move: number): Prom
 export const getUsersLastMatch = (gameData: GameData) => {
     for (let i = gameData.rounds.length - 1; i >= 0; i--) {
         if (gameData.rounds[i].match && gameData.rounds[i].id !== gameData.currentRoundId) {
-            return { match: gameData.rounds[i].match, roundLost: i + 1 };
+            return { match: gameData.rounds[i].match, roundLost: gameData.rounds[i].round_number };
         }
     }
     return undefined;
