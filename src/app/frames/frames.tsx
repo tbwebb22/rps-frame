@@ -504,7 +504,7 @@ export const lost = (roundNumber: number, opponentName: string) => {
             fontSize: 30,
             marginTop: 0,
           }}
-        >{`You lost in round 1 to @${opponentName}`}</div>
+        >{`You lost in round ${roundNumber} to @${opponentName}`}</div>
         <div
           style={{
             display: "flex",
