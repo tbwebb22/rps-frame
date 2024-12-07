@@ -32,7 +32,11 @@ export const homeFrame = (gameId: string) => {
         </div>
       </div>
     ),
-    intents: [<Button>Play</Button>],
+    intents: [
+    <Button>Play</Button>,
+    <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>Bracket</Button.Link>,
+],
+    title: `Rock Pepe Slizards`
   };
 };
 
@@ -109,6 +113,7 @@ export const selectPlay = (
       <Button value="Pepe">Pepe</Button>,
       <Button value="Slizards">Slizards</Button>,
     ],
+    title: `Rock Pepe Slizards`
   };
 };
 
@@ -167,6 +172,7 @@ export const played = (
         </div>
       </div>
     ),
+    title: `Rock Pepe Slizards`
   };
 };
 
@@ -201,6 +207,7 @@ export const registrationNotStarted = () => {
         </div>
       </div>
     ),
+    title: `Rock Pepe Slizards`
   };
 };
 
@@ -242,6 +249,7 @@ export const registrationFull = () => {
         </div>
       </div>
     ),
+    title: `Rock Pepe Slizards`
   };
 };
 
@@ -276,6 +284,7 @@ export const register = (gameId: string, userName: string) => {
         </div>
       </div>
     ),
+    title: `Rock Pepe Slizards`,
     intents: [<Button value="register">Register</Button>],
   };
 };
@@ -319,6 +328,7 @@ export const registered = (gameId: string, gameStartString: string) => {
         >{`The game starts in ${minutesUntilStart} minutes!`}</div>
       </div>
     ),
+    title: `Rock Pepe Slizards`,
   };
 };
 
@@ -369,6 +379,7 @@ export const notRegistered = () => {
         </div>
       </div>
     ),
+    title: `Rock Pepe Slizards`,
   };
 };
 
@@ -416,6 +427,7 @@ export const roundOne = (
         </div>
       </div>
     ),
+    title: `Rock Pepe Slizards`,
     intents: [<Button value="play">Play</Button>],
   };
 };
@@ -467,6 +479,7 @@ export const wonLastRound = (
         </div>
       </div>
     ),
+    title: `Rock Pepe Slizards`,
     intents: [<Button value="play">Next Match</Button>],
   };
 };
@@ -516,6 +529,7 @@ export const lost = (roundNumber: number, opponentName: string) => {
         </div>
       </div>
     ),
+    title: `Rock Pepe Slizards`,
   };
 };
 
@@ -557,6 +571,7 @@ export const notVerified = () => {
         </div>
       </div>
     ),
+    title: `Rock Pepe Slizards`,
   };
 };
 
@@ -586,6 +601,7 @@ export const gameOver = (gameId: string, winnerName: string) => {
         >{`@${winnerName} won it all!`}</div>
       </div>
     ),
+    title: `Rock Pepe Slizards`,
   };
 };
 
