@@ -33,3 +33,8 @@ export interface GameData {
     rounds: Round[];
     winnerId: number | null;
 }
+
+export interface CreateGameStatus {
+    canCreate: boolean;
+    waitTimeMinutes: number;
+}
