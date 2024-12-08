@@ -13,6 +13,8 @@ import {
   getMoveString,
   getMoveNumber,
   isUserInFirstRound,
+  fetchCreateGameStatus,
+  createGamePost,
 } from "../../../utils/api";
 import {
   homeFrame,
@@ -28,6 +30,9 @@ import {
   played,
   notVerified,
   notRegistered,
+  createGameStatus,
+  createdGame,
+  createGame,
 } from "../../frames/frames";
 import { GameData } from "../../../types/types";
 
@@ -60,6 +65,40 @@ const app = new Frog<{ State: State }>({
       },
     ],
   },
+});
+
+app.frame("/create", (c) => {
+  return c.res(createGame());
+});
+
+app.frame("/createstatus", async (c) => {
+  const { frameData, verified, deriveState } = c;
+  const fid = frameData?.fid;
+
+  if ((process.env.VERIFY === "true" && !verified) || !fid) {
+    return c.res(notVerified());
+  }
+
+  const { canCreate, waitTimeMinutes } = await fetchCreateGameStatus();
+
+  return c.res(createGameStatus(canCreate, waitTimeMinutes));
+});
+
+app.frame("/created", async (c) => {
+  const { frameData, verified, deriveState } = c;
+  const fid = frameData?.fid;
+
+  if ((process.env.VERIFY === "true" && !verified) || !fid) {
+    return c.res(notVerified());
+  }
+
+  const minutesToStart = 30;
+  const maxRounds = 5;
+  const roundLengthMinutes = 15;
+
+  await createGamePost(minutesToStart, maxRounds, fid, roundLengthMinutes);
+
+  return c.res(createdGame());
 });
 
 app.frame("/game/:gameId", (c) => {

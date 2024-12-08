@@ -1,8 +1,27 @@
 import { getFarcasterUserDetails, FarcasterUserDetailsOutput } from "@airstack/frog";
-import { GameData } from "../types/types";
+import { GameData, CreateGameStatus } from "../types/types";
 
 export async function fetchGameData(gameId: string, fid: string): Promise<GameData> {
     const url = `${process.env.BACKEND_URL}/api/games/${gameId}/status/${fid}`;
+    const headers = {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.BACKEND_API_KEY || '',
+    };
+
+    const response = await fetch(url, {
+        method: "GET",
+        headers,
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
+}
+
+export async function fetchCreateGameStatus(): Promise<CreateGameStatus> {
+    const url = `${process.env.BACKEND_URL}/api/games/createStatus`;
     const headers = {
         "Content-Type": "application/json",
         "x-api-key": process.env.BACKEND_API_KEY || '',
@@ -31,6 +50,23 @@ export async function fetchUserData(fid: number | null) {
     if (error) throw new Error(error);
 
     return data;
+}
+
+export async function createGamePost(minutesToStart: number, maxRounds: number, sponsorId: number, roundLengthMinutes: number): Promise<any> {
+    const response = await fetch(`${process.env.BACKEND_URL}/api/games/create`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            "x-api-key": process.env.BACKEND_API_KEY || '',
+        },
+        body: JSON.stringify({ minutesToStart, maxRounds, sponsorId, roundLengthMinutes }),
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
 }
 
 export async function registerUserForGame(fid: number, gameId: number): Promise<any> {

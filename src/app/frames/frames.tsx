@@ -5,6 +5,110 @@ import { Button, Frog } from "@airstack/frog";
 const backgroundColor = "#16101e";
 const fontColor = "#c282ff";
 
+export const createGame = () => {
+  return {
+    action: `/createstatus`,
+    image: (
+      <div
+        style={{
+          fontFamily: "Anton",
+          backgroundColor,
+          color: fontColor,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontSize: 60,
+          width: "100%",
+          height: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <HeroImage />
+      </div>
+    ),
+    intents: [<Button>Launch Tournament</Button>],
+    title: `Rock Pepe Slizards`,
+  };
+};
+
+export const createGameStatus = (
+  canLaunch: boolean,
+  minutesUntilStart: number
+) => {
+  return {
+    action: `/created`,
+    image: (
+      <div
+        style={{
+          fontFamily: "Anton",
+          backgroundColor,
+          color: fontColor,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontSize: 60,
+          width: "100%",
+          height: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <HeroImage />
+        {canLaunch ? (
+          <>
+            <div style={{ fontSize: 40, marginTop: 10 }}>
+              Registration will start immediately
+            </div>
+            <div style={{ fontSize: 40, marginTop: 10 }}>
+              Round 1 will start in ~30 minutes
+            </div>
+            <div style={{ fontSize: 40, marginTop: 10 }}>
+              Launch tournament below!
+            </div>
+          </>
+        ) : (
+            <>
+            <div style={{ fontSize: 40, marginTop: 10 }}>
+              Another tournament was recently launched
+            </div>
+            <div style={{ fontSize: 40, marginTop: 10 }}>
+              {`Please launch tournament in ${minutesUntilStart} minutes`}
+            </div>
+          </>
+        )}
+      </div>
+    ),
+    intents: [<Button>Launch Tournament</Button>],
+    title: `Rock Pepe Slizards`,
+  };
+};
+
+export const createdGame = () => {
+    return {
+      image: (
+        <div
+          style={{
+            fontFamily: "Anton",
+            backgroundColor,
+            color: fontColor,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            fontSize: 60,
+            width: "100%",
+            height: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          <HeroImage />
+              <div style={{ fontSize: 40, marginTop: 10 }}>
+                Tournament created!
+              </div>
+        </div>
+      ),
+      title: `Rock Pepe Slizards`,
+    };
+  };
+
 export const homeFrame = (gameId: string) => {
   return {
     action: `/game/${gameId}/play`,
@@ -24,19 +128,17 @@ export const homeFrame = (gameId: string) => {
         }}
       >
         <HeroImage />
-        <div style={{ fontSize: 40, marginTop: 50 }}>
-          Free to play
-        </div>
-        <div style={{ fontSize: 40 }}>
-          {`Tournament #${gameId}`}
-        </div>
+        <div style={{ fontSize: 40, marginTop: 50 }}>Free to play</div>
+        <div style={{ fontSize: 40 }}>{`Tournament #${gameId}`}</div>
       </div>
     ),
     intents: [
-    <Button>Play</Button>,
-    <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>Bracket</Button.Link>,
-],
-    title: `Rock Pepe Slizards`
+      <Button>Play</Button>,
+      <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>
+        Bracket
+      </Button.Link>,
+    ],
+    title: `Rock Pepe Slizards`,
   };
 };
 
@@ -70,18 +172,10 @@ export const selectPlay = (
         <div
           style={{ fontSize: 60, marginTop: 0 }}
         >{`Round ${roundNumber}`}</div>
-        <div
-          style={{ fontSize: 40, marginTop: 30 }}
-        >{`${profileName}`}</div>
-        <div
-          style={{ fontSize: 40, marginTop: 0 }}
-        >{`vs`}</div>
-        <div
-          style={{ fontSize: 40, marginTop: 0 }}
-        >{`${opponentName}`}</div>
-        <div
-          style={{ fontSize: 40, marginTop: 40 }}
-        >{`Select your move`}</div>
+        <div style={{ fontSize: 40, marginTop: 30 }}>{`${profileName}`}</div>
+        <div style={{ fontSize: 40, marginTop: 0 }}>{`vs`}</div>
+        <div style={{ fontSize: 40, marginTop: 0 }}>{`${opponentName}`}</div>
+        <div style={{ fontSize: 40, marginTop: 40 }}>{`Select your move`}</div>
         <div
           style={{
             display: "flex",
@@ -113,7 +207,7 @@ export const selectPlay = (
       <Button value="Pepe">Pepe</Button>,
       <Button value="Slizards">Slizards</Button>,
     ],
-    title: `Rock Pepe Slizards`
+    title: `Rock Pepe Slizards`,
   };
 };
 
@@ -164,18 +258,18 @@ export const played = (
             padding: "20px",
           }}
         />
-        <div style={{ fontSize: 30 }}>
-          {`You played ${playerMove}!`}
-        </div>
+        <div style={{ fontSize: 30 }}>{`You played ${playerMove}!`}</div>
         <div style={{ fontSize: 30 }}>
           {`Next match in ${minutesUntilStart} minutes`}
         </div>
       </div>
     ),
     intents: [
-        <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>Bracket</Button.Link>,
+      <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>
+        Bracket
+      </Button.Link>,
     ],
-    title: `Rock Pepe Slizards`
+    title: `Rock Pepe Slizards`,
   };
 };
 
@@ -210,7 +304,7 @@ export const registrationNotStarted = () => {
         </div>
       </div>
     ),
-    title: `Rock Pepe Slizards`
+    title: `Rock Pepe Slizards`,
   };
 };
 
@@ -252,7 +346,7 @@ export const registrationFull = () => {
         </div>
       </div>
     ),
-    title: `Rock Pepe Slizards`
+    title: `Rock Pepe Slizards`,
   };
 };
 
@@ -374,7 +468,9 @@ export const notRegistered = (gameId: string) => {
       </div>
     ),
     intents: [
-        <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>Bracket</Button.Link>,
+      <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>
+        Bracket
+      </Button.Link>,
     ],
     title: `Rock Pepe Slizards`,
   };
@@ -481,7 +577,11 @@ export const wonLastRound = (
   };
 };
 
-export const lost = (gameId: string, roundNumber: number, opponentName: string) => {
+export const lost = (
+  gameId: string,
+  roundNumber: number,
+  opponentName: string
+) => {
   return {
     image: (
       <div
@@ -527,7 +627,9 @@ export const lost = (gameId: string, roundNumber: number, opponentName: string) 
       </div>
     ),
     intents: [
-        <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>Bracket</Button.Link>,
+      <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>
+        Bracket
+      </Button.Link>,
     ],
     title: `Rock Pepe Slizards`,
   };
@@ -602,7 +704,9 @@ export const gameOver = (gameId: string, winnerName: string) => {
       </div>
     ),
     intents: [
-        <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>Bracket</Button.Link>,
+      <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>
+        Bracket
+      </Button.Link>,
     ],
     title: `Rock Pepe Slizards`,
   };
