@@ -172,6 +172,9 @@ export const played = (
         </div>
       </div>
     ),
+    intents: [
+        <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>Bracket</Button.Link>,
+    ],
     title: `Rock Pepe Slizards`
   };
 };
@@ -332,7 +335,7 @@ export const registered = (gameId: string, gameStartString: string) => {
   };
 };
 
-export const notRegistered = () => {
+export const notRegistered = (gameId: string) => {
   return {
     image: (
       <div
@@ -357,7 +360,7 @@ export const notRegistered = () => {
             marginTop: 50,
           }}
         >
-          This game has started,
+          This tournament has already started
         </div>
         <div
           style={{
@@ -366,19 +369,13 @@ export const notRegistered = () => {
             marginTop: 10,
           }}
         >
-          but you are not registered.
-        </div>
-        <div
-          style={{
-            display: "flex",
-            fontSize: 30,
-            marginTop: 10,
-          }}
-        >
-          Please come back for the next game! 🙏
+          Please come back for the next one! 🙏
         </div>
       </div>
     ),
+    intents: [
+        <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>Bracket</Button.Link>,
+    ],
     title: `Rock Pepe Slizards`,
   };
 };
@@ -484,7 +481,7 @@ export const wonLastRound = (
   };
 };
 
-export const lost = (roundNumber: number, opponentName: string) => {
+export const lost = (gameId: string, roundNumber: number, opponentName: string) => {
   return {
     image: (
       <div
@@ -529,6 +526,9 @@ export const lost = (roundNumber: number, opponentName: string) => {
         </div>
       </div>
     ),
+    intents: [
+        <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>Bracket</Button.Link>,
+    ],
     title: `Rock Pepe Slizards`,
   };
 };
@@ -601,6 +601,9 @@ export const gameOver = (gameId: string, winnerName: string) => {
         >{`@${winnerName} won it all!`}</div>
       </div>
     ),
+    intents: [
+        <Button.Link href={`https://rps-bracketer.vercel.app/bracket/${gameId}`}>Bracket</Button.Link>,
+    ],
     title: `Rock Pepe Slizards`,
   };
 };

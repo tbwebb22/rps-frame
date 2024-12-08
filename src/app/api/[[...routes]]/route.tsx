@@ -111,7 +111,7 @@ app.frame("/game/:gameId/play", async (c) => {
     if (!isUserInFirstRound(gameData)) {
       // user is not registered
 
-      return c.res(notRegistered());
+      return c.res(notRegistered(gameId));
     } else if (currentRound.match && currentRound.match.playerMove !== null) {
       // player already played
 
@@ -142,7 +142,7 @@ app.frame("/game/:gameId/play", async (c) => {
         lastMatchAndRound.match.opponentId
       );
 
-      return c.res(lost(lastMatchAndRound.roundLost, opponentData.profileName));
+      return c.res(lost(gameId, lastMatchAndRound.roundLost, opponentData.profileName));
     } else {
       // user is in the current round
 
