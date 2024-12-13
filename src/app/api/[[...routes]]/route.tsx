@@ -30,9 +30,10 @@ import {
   played,
   notVerified,
   notRegistered,
-  createGameStatus,
   createdGame,
-  createGame,
+  createGameMoxieAmount,
+  createGameAnnouncement,
+  createGameStart,
 } from "../../frames/frames";
 import { GameData } from "../../../types/types";
 
@@ -41,6 +42,7 @@ type State = {
 };
 
 const app = new Frog<{ State: State }>({
+  title: "Rock Pepe Slizards",
   hub: {
     apiUrl: "https://hubs.airstack.xyz",
     fetchOptions: {
@@ -68,38 +70,50 @@ const app = new Frog<{ State: State }>({
 });
 
 app.frame("/create", (c) => {
-  return c.res(createGame());
+  return c.res(createGameStart());
 });
 
-app.frame("/createstatus", async (c) => {
-  const { frameData, verified, deriveState } = c;
+app.frame("/createmoxie", async (c) => {
+  const { frameData, verified } = c;
+  const fid = frameData?.fid;
+  if ((process.env.VERIFY === "true" && !verified) || !fid) {
+    return c.res(notVerified());
+  }
+
+  return c.res(createGameMoxieAmount());
+});
+
+app.frame("/createfinal", async (c) => {
+  const { frameData, verified, buttonValue } = c;
   const fid = frameData?.fid;
 
   if ((process.env.VERIFY === "true" && !verified) || !fid) {
     return c.res(notVerified());
   }
+  const gameId = 1;
+  const moxiePrize = 1000;
 
-  const { canCreate, waitTimeMinutes } = await fetchCreateGameStatus();
+  const castUrl = `https://warpcast.com/~/compose?text=I'm%20sponsoring%20Rock%20Pepe%20Slizards%20Tournament%20%23${gameId}!%0A%0A${moxiePrize}%20Moxie%20prize%20to%20the%20winner%20💰%0A%0AEasy%20to%20play%20(it's%20just%20rock%20paper%20scissors)%2C%20impossible%20to%20master%20(it's%20all%20luck)%0A%0A🗿%20Rock%20beats%20Slizards%20🦎%0A🐸%20Pepe%20beats%20Rock%20🗿%0A🦎%20Slizards%20beats%20Pepe%20🐸%0A%0AIf%20you%20want%20to%20play%3A%0A1)%20Follow%20%40rps-referee%20-%20this%20bot%20will%20notify%20you%20when%20you%20need%20to%20make%20a%20play%0A2)%20Register%20in%20the%20frame%20below%20-%20first%2032%20to%20register%20get%20to%20play%0A3)%20All%20players%20get%20placed%20into%20a%20bracket%20and%20matched%20up%20against%20opponents%20in%2015%20minute%20matches%20until%20we%20have%20a%20winner%0A%0AMay%20the%20odds%20be%20ever%20in%20your%20favor%20🙏%0A%0A🗿%20🐸%20🦎&embeds[]=https://rps-frame.vercel.app/api/game/${gameId}&channelKey=rockpepeslizards`;
 
-  return c.res(createGameStatus(canCreate, waitTimeMinutes));
+  return c.res(createGameAnnouncement(buttonValue, castUrl));
 });
 
-app.frame("/created", async (c) => {
-  const { frameData, verified, deriveState } = c;
-  const fid = frameData?.fid;
+// app.frame("/created", async (c) => {
+//   const { frameData, verified, deriveState } = c;
+//   const fid = frameData?.fid;
 
-  if ((process.env.VERIFY === "true" && !verified) || !fid) {
-    return c.res(notVerified());
-  }
+//   if ((process.env.VERIFY === "true" && !verified) || !fid) {
+//     return c.res(notVerified());
+//   }
 
-  const minutesToStart = 30;
-  const maxRounds = 5;
-  const roundLengthMinutes = 15;
+//   const minutesToStart = 30;
+//   const maxRounds = 5;
+//   const roundLengthMinutes = 15;
 
-  await createGamePost(minutesToStart, maxRounds, fid, roundLengthMinutes);
+//   await createGamePost(minutesToStart, maxRounds, fid, roundLengthMinutes);
 
-  return c.res(createdGame());
-});
+//   return c.res(createdGame());
+// });
 
 app.frame("/game/:gameId", (c) => {
   const { gameId } = c.req.param();
