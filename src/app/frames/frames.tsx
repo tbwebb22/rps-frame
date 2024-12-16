@@ -126,7 +126,9 @@ export const approvedMoxie = (transactionId: string) => {
         </div>
       ),
       intents: [
-
+        <Button.Transaction target="/sendmoxietx">
+        Send Moxie
+      </Button.Transaction>,
       ],
       title: `Rock Pepe Slizards`,
     };

@@ -112,6 +112,18 @@ app.frame("/approvedmoxie", (c) => {
   return c.res(approvedMoxie(transactionId));
 });
 
+app.frame("/sendmoxie", (c) => {
+  const moxieAmount = 1000;
+
+  return c.res(approveMoxie());
+});
+
+app.frame("/sentmoxie", (c) => {
+  const moxieAmount = 1000;
+
+  return c.res(approveMoxie());
+});
+
 app.transaction('/approvemoxietx', (c) => {
   // const { inputText } = c
   // Contract transaction response.
