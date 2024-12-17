@@ -39,6 +39,7 @@ import {
   approvedMoxie,
 } from "../../frames/frames";
 import { GameData } from "../../../types/types";
+import { getMoxieAllowance } from "../../../utils/api";
 
 type State = {
   game: GameData | null;
@@ -72,13 +73,23 @@ const app = new Frog<{ State: State }>({
   },
 });
 
-app.frame("/create", (c) => {
+app.frame("/create", async (c) => {
+  const { frameData } = c;
+  // const userAddress = frameData?.address;
+  const userAddress = "0xFA205120907585D2c46214beB2f27Bc496e4235d";
+  const escrowAddress = process.env.ESCROW_ADDRESS;
+
+  const moxieAllowance = await getMoxieAllowance(userAddress, escrowAddress);
+  console.log("moxieAllowance: ", moxieAllowance);
+
   return c.res(createGameStart());
 });
 
 app.frame("/createmoxie", async (c) => {
   const { frameData, verified } = c;
   const fid = frameData?.fid;
+  const userAddress = frameData?.address;
+  console.log("userAddress: ", userAddress);
   if ((process.env.VERIFY === "true" && !verified) || !fid) {
     return c.res(notVerified());
   }

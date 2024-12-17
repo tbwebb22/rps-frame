@@ -1,5 +1,17 @@
 import { getFarcasterUserDetails, FarcasterUserDetailsOutput } from "@airstack/frog";
 import { GameData, CreateGameStatus } from "../types/types";
+import { ethers } from "ethers";
+import { moxieAbi } from "../abis/moxieAbi";
+
+
+export async function getMoxieAllowance(ownerAddress: string, spendAddress: string) {
+    const provider = new ethers.JsonRpcProvider(process.env.BASE_RPC_URL);
+    const contract = new ethers.Contract(process.env.MOXIE_ADDRESS, moxieAbi, provider);
+    const allowance = await contract.allowance(ownerAddress, spendAddress);
+
+    return allowance;
+}
+
 
 export async function fetchGameData(gameId: string, fid: string): Promise<GameData> {
     const url = `${process.env.BACKEND_URL}/api/games/${gameId}/status/${fid}`;
