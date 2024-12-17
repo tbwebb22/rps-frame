@@ -13,6 +13,7 @@
   "dependencies": {
     "@airstack/frog": "^0.0.19",
     "dotenv": "^16.4.5",
+    "ethers": "^6.13.4",
     "next": "14.1.0",
     "react": "^18",
     "react-dom": "^18"
