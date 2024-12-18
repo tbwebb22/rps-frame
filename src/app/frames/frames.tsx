@@ -5,9 +5,9 @@ import { Button, Frog, TextInput } from "@airstack/frog";
 const backgroundColor = "#16101e";
 const fontColor = "#c282ff";
 
-export const createGameStart = () => {
+export const create = () => {
   return {
-    action: `/createmoxie`,
+    action: `/createmoxieamount`,
     image: (
       <div
         style={{
@@ -31,9 +31,9 @@ export const createGameStart = () => {
   };
 };
 
-export const createGameMoxieAmount = () => {
+export const createMoxieAmount = () => {
   return {
-    action: `/createfinal`,
+    action: `/createmoxieapproval`,
     image: (
       <div
         style={{
@@ -65,38 +65,129 @@ export const createGameMoxieAmount = () => {
   };
 };
 
-export const approveMoxie = () => {
-  return {
-    action: `/approvedmoxie`,
-    image: (
-      <div
-        style={{
-          fontFamily: "Anton",
-          backgroundColor,
-          color: fontColor,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          fontSize: 60,
-          width: "100%",
-          height: "100%",
-          boxSizing: "border-box",
-        }}
-      >
-        <HeroImage />
-        <div style={{ fontSize: 40, marginTop: 10 }}>
-          Enter Moxie sponsorship amount
+export const createMoxieApproval = (moxieAmount: string) => {
+    return {
+      action: `/createmoxieapprovalcheck`,
+      image: (
+        <div
+          style={{
+            fontFamily: "Anton",
+            backgroundColor,
+            color: fontColor,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            fontSize: 60,
+            width: "100%",
+            height: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          <HeroImage />
+          <div style={{ fontSize: 40, marginTop: 10 }}>
+            Approve
+          </div>
         </div>
-      </div>
-    ),
-    intents: [
-      <Button.Transaction target="/approvemoxietx">
-        Approve Moxie
-      </Button.Transaction>,
-    ],
-    title: `Rock Pepe Slizards`,
+      ),
+      intents: [
+        <Button.Transaction target={`/createmoxieapprovaltx/${moxieAmount}`}>Approve</Button.Transaction>,
+      ],
+      title: `Rock Pepe Slizards`,
+    };
   };
-};
+
+  export const createMoxieApprovalCheck = (approved: boolean) => {
+    return {
+      action: approved ? `/createmoxiesend` : `/createmoxieapprovalcheck`,
+      image: (
+        <div
+          style={{
+            fontFamily: "Anton",
+            backgroundColor,
+            color: fontColor,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            fontSize: 60,
+            width: "100%",
+            height: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          <HeroImage />
+          <div style={{ fontSize: 40, marginTop: 10 }}>
+            {approved ? "Approval success" : "Check again in a few seconds..."}
+          </div>
+        </div>
+      ),
+      intents: [
+        <Button value="1000">{approved ? "Next" : "Check approval"}</Button>,
+      ],
+      title: `Rock Pepe Slizards`,
+    };
+  };
+
+  export const createMoxieSend = (moxieAmount: string) => {
+    return {
+      action: `/createmoxiesendcheck`,
+      image: (
+        <div
+          style={{
+            fontFamily: "Anton",
+            backgroundColor,
+            color: fontColor,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            fontSize: 60,
+            width: "100%",
+            height: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          <HeroImage />
+          <div style={{ fontSize: 40, marginTop: 10 }}>
+            Send Moxie
+          </div>
+        </div>
+      ),
+      intents: [
+        <Button.Transaction target={`/createmoxiesendtx/${moxieAmount}`}>Send Moxie</Button.Transaction>,
+      ],
+      title: `Rock Pepe Slizards`,
+    };
+  };
+
+  export const createMoxieSendCheck = (sent: boolean) => {
+    return {
+      action: sent ? `/createfinal` : `/createmoxiesendcheck`,
+      image: (
+        <div
+          style={{
+            fontFamily: "Anton",
+            backgroundColor,
+            color: fontColor,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            fontSize: 60,
+            width: "100%",
+            height: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          <HeroImage />
+          <div style={{ fontSize: 40, marginTop: 10 }}>
+            Check Sent
+          </div>
+        </div>
+      ),
+      intents: [
+        <Button value="1000">Check</Button>,
+      ],
+      title: `Rock Pepe Slizards`,
+    };
+  };
 
 export const approvedMoxie = (transactionId: string) => {
     return {

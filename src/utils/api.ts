@@ -2,14 +2,37 @@ import { getFarcasterUserDetails, FarcasterUserDetailsOutput } from "@airstack/f
 import { GameData, CreateGameStatus } from "../types/types";
 import { ethers } from "ethers";
 import { moxieAbi } from "../abis/moxieAbi";
+import { escrowAbi } from "../abis/escrowAbi";
 
 
 export async function getMoxieAllowance(ownerAddress: string, spendAddress: string) {
+    console.log("getting moxie allowance");
+    console.log("ownerAddress: ", ownerAddress);
+    console.log("spendAddress: ", spendAddress);
     const provider = new ethers.JsonRpcProvider(process.env.BASE_RPC_URL);
-    const contract = new ethers.Contract(process.env.MOXIE_ADDRESS, moxieAbi, provider);
-    const allowance = await contract.allowance(ownerAddress, spendAddress);
+    const moxieContract = new ethers.Contract(process.env.MOXIE_ADDRESS, moxieAbi, provider);
+    const allowance = await moxieContract.allowance(ownerAddress, spendAddress);
 
     return allowance;
+}
+
+export async function checkDeposit(fid: number) {
+    console.log("checking deposit for fid: ", fid);
+    const provider = new ethers.JsonRpcProvider(process.env.BASE_RPC_URL);
+    const escrowContract = new ethers.Contract(
+        process.env.ESCROW_ADDRESS!,
+        escrowAbi,
+        provider
+    );
+    
+    // Get events from last 1000 blocks
+    const filter = escrowContract.filters.Deposit(null, fid);
+    const blockNumber = await provider.getBlockNumber();
+    const events = await escrowContract.queryFilter(filter, blockNumber - 100, blockNumber);
+    console.log("events: ", JSON.stringify(events));
+    
+    // TODO: update this
+    return events.length > 0;
 }
 
 
