@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 /** @jsxImportSource @airstack/frog/jsx */
-import { Button, Frog, TextInput } from "@airstack/frog";
+import { Button } from "@airstack/frog";
 
 const backgroundColor = "#16101e";
 const fontColor = "#c282ff";
@@ -24,6 +24,9 @@ export const create = () => {
         }}
       >
         <HeroImage />
+        <div style={{ fontSize: 50, marginTop: 40 }}>
+          Tournament Launcher
+        </div>
       </div>
     ),
     intents: [<Button>Launch Tournament</Button>],
@@ -51,15 +54,15 @@ export const createMoxieAmount = () => {
       >
         <HeroImage />
         <div style={{ fontSize: 40, marginTop: 10 }}>
-          Enter Moxie sponsorship amount
+          Select winner prize amount
         </div>
       </div>
     ),
     intents: [
-      <Button value="1000">1,000 Moxie</Button>,
-      <Button value="2500">2,500 Moxie</Button>,
-      <Button value="5000">5,000 Moxie</Button>,
-      <Button value="10000">10,000 Moxie</Button>,
+      <Button value="1000000000000000000000">1,000 Moxie</Button>,
+      <Button value="2500000000000000000000">2,500 Moxie</Button>,
+      <Button value="5000000000000000000000">5,000 Moxie</Button>,
+      <Button value="10000000000000000000000">10,000 Moxie</Button>,
     ],
     title: `Rock Pepe Slizards`,
   };
@@ -85,7 +88,7 @@ export const createMoxieApproval = (moxieAmount: string) => {
         >
           <HeroImage />
           <div style={{ fontSize: 40, marginTop: 10 }}>
-            Approve
+            Approve Moxie transfer
           </div>
         </div>
       ),
@@ -116,12 +119,12 @@ export const createMoxieApproval = (moxieAmount: string) => {
         >
           <HeroImage />
           <div style={{ fontSize: 40, marginTop: 10 }}>
-            {approved ? "Approval success" : "Check again in a few seconds..."}
+            {approved ? "Approval succeeded!" : "Submitting transaction..."}
           </div>
         </div>
       ),
       intents: [
-        <Button value="1000">{approved ? "Next" : "Check approval"}</Button>,
+        <Button value="1000">{approved ? "Next" : "Check status"}</Button>,
       ],
       title: `Rock Pepe Slizards`,
     };
@@ -147,7 +150,7 @@ export const createMoxieApproval = (moxieAmount: string) => {
         >
           <HeroImage />
           <div style={{ fontSize: 40, marginTop: 10 }}>
-            Send Moxie
+            Deposit reward Moxie
           </div>
         </div>
       ),
@@ -178,48 +181,12 @@ export const createMoxieApproval = (moxieAmount: string) => {
         >
           <HeroImage />
           <div style={{ fontSize: 40, marginTop: 10 }}>
-            Check Sent
+            Submitting transaction...
           </div>
         </div>
       ),
       intents: [
-        <Button value="1000">Check</Button>,
-      ],
-      title: `Rock Pepe Slizards`,
-    };
-  };
-
-export const approvedMoxie = (transactionId: string) => {
-    return {
-      action: `/createfinal`,
-      image: (
-        <div
-          style={{
-            fontFamily: "Anton",
-            backgroundColor,
-            color: fontColor,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            fontSize: 60,
-            width: "100%",
-            height: "100%",
-            boxSizing: "border-box",
-          }}
-        >
-          <HeroImage />
-          <div style={{ fontSize: 40, marginTop: 10 }}>
-            Approved Moxie! Transaction ID:
-          </div>
-          <div style={{ fontSize: 10, marginTop: 10 }}>
-            {transactionId}
-          </div>
-        </div>
-      ),
-      intents: [
-        <Button.Transaction target="/sendmoxietx">
-        Send Moxie
-      </Button.Transaction>,
+        <Button value="1000">Check status</Button>,
       ],
       title: `Rock Pepe Slizards`,
     };
@@ -227,7 +194,8 @@ export const approvedMoxie = (transactionId: string) => {
 
 export const createGameAnnouncement = (
   moxieAmount: string,
-  castUrl: string
+  castUrl: string,
+  gameId: number
 ) => {
   return {
     image: (
@@ -247,7 +215,10 @@ export const createGameAnnouncement = (
       >
         <HeroImage />
         <div style={{ fontSize: 40, marginTop: 10 }}>
-          {`${moxieAmount} Moxie sponsorship!`}
+          {`Created tournament #${gameId}`}
+        </div>
+        <div style={{ fontSize: 40, marginTop: 0 }}>
+          {`with ${moxieAmount} Moxie prize 💰`}
         </div>
         <div style={{ fontSize: 40, marginTop: 10 }}>
           Announce the tournament below!
@@ -258,57 +229,6 @@ export const createGameAnnouncement = (
     title: `Rock Pepe Slizards`,
   };
 };
-
-// export const createGameStatus = (
-//   canLaunch: boolean,
-//   minutesUntilStart: number
-// ) => {
-//   return {
-//     action: `/created`,
-//     image: (
-//       <div
-//         style={{
-//           fontFamily: "Anton",
-//           backgroundColor,
-//           color: fontColor,
-//           display: "flex",
-//           flexDirection: "column",
-//           alignItems: "center",
-//           fontSize: 60,
-//           width: "100%",
-//           height: "100%",
-//           boxSizing: "border-box",
-//         }}
-//       >
-//         <HeroImage />
-//         {canLaunch ? (
-//           <>
-//             <div style={{ fontSize: 40, marginTop: 10 }}>
-//               Registration will start immediately
-//             </div>
-//             <div style={{ fontSize: 40, marginTop: 10 }}>
-//               Round 1 will start in ~30 minutes
-//             </div>
-//             <div style={{ fontSize: 40, marginTop: 10 }}>
-//               Launch tournament below!
-//             </div>
-//           </>
-//         ) : (
-//             <>
-//             <div style={{ fontSize: 40, marginTop: 10 }}>
-//               Another tournament was recently launched
-//             </div>
-//             <div style={{ fontSize: 40, marginTop: 10 }}>
-//               {`Please launch tournament in ${minutesUntilStart} minutes`}
-//             </div>
-//           </>
-//         )}
-//       </div>
-//     ),
-//     intents: [<Button>Launch Tournament</Button>],
-//     title: `Rock Pepe Slizards`,
-//   };
-// };
 
 export const createdGame = () => {
   return {

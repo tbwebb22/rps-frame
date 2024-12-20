@@ -52,6 +52,7 @@ type State = {
 
 type CreateFlowState = {
   moxieAmount: string;
+  depositId: number;
 }
 
 const app = new Frog<{ State: State }>({
@@ -72,6 +73,7 @@ const app = new Frog<{ State: State }>({
     game: null,
     createFlow: {
       moxieAmount: "0",
+      depositId: null,
     },
   },
   imageOptions: {
@@ -84,186 +86,6 @@ const app = new Frog<{ State: State }>({
     ],
   },
 });
-
-app.frame("/create", async (c) => {
-  return c.res(create());
-});
-
-app.frame("/createmoxieamount", async (c) => {
-  const { frameData, verified } = c;
-  const fid = frameData?.fid;
-
-  if ((process.env.VERIFY === "true" && !verified) || !fid) {
-    return c.res(notVerified());
-  } 
-
-  return c.res(createMoxieAmount());
-});
-
-app.frame("/createmoxieapproval", async (c) => {
-  const { frameData, verified, buttonValue, deriveState } = c;
-  const fid = frameData?.fid;
-  const moxieAmount = buttonValue;
-
-  console.log("moxieAmount: ", moxieAmount);
-
-  deriveState((state) => {
-    state.createFlow.moxieAmount = moxieAmount;
-  });
-
-  if ((process.env.VERIFY === "true" && !verified) || !fid) {
-    return c.res(notVerified());
-  } 
-
-  return c.res(createMoxieApproval(moxieAmount));
-});
-
-app.transaction('/createmoxieapprovaltx/:moxieAmount', (c) => {
-  const { frameData, verified, req } = c;
-  const { moxieAmount } = req.param();
-
-  const moxieApprovalAmount = BigInt(moxieAmount);
-  console.log("moxieApprovalAmount: ", moxieApprovalAmount);
-  const moxieAddress = '0x8C9037D1Ef5c6D1f6816278C7AAF5491d24CD527';
-  const spenderAddress = process.env.ESCROW_ADDRESS;
-
-  return c.contract({
-    abi: moxieAbi,
-    chainId: 'eip155:8453',
-    functionName: 'approve',
-    args: [spenderAddress, moxieApprovalAmount],
-    to: moxieAddress,
-    value: BigInt(0)
-  })
-});
-
-app.frame("/createmoxieapprovalcheck", async (c) => {
-  const { frameData, verified, deriveState } = c;
-  const fid = frameData.fid;
-  const address = frameData.address;
-
-  console.log("fid: ", fid);
-  console.log("address: ", address);
-
-  let moxieAmount;
-  deriveState((state) => {
-    moxieAmount = state.createFlow.moxieAmount;
-  });
-
-  console.log("**moxieAmount: ", moxieAmount);
-
-  if ((process.env.VERIFY === "true" && !verified) || !fid) {
-    return c.res(notVerified());
-  } 
-
-  const userAddress = "0x1eF03652a1361A9F965b12bE2d75cd71ed0F5065";
-
-  // const approved = false;
-  const allowance = await getMoxieAllowance(userAddress, process.env.ESCROW_ADDRESS);
-
-  console.log("allowance: ", allowance);
-
-  const approved = allowance >= BigInt(moxieAmount);
-
-  return c.res(createMoxieApprovalCheck(approved));
-});
-
-app.frame("/createmoxiesend", async (c) => {
-  const { frameData, verified, buttonValue, deriveState } = c;
-  const fid = frameData?.fid;
-
-  if ((process.env.VERIFY === "true" && !verified) || !fid) {
-    return c.res(notVerified());
-  } 
-
-  let moxieAmount;
-  deriveState((state) => {
-    moxieAmount =state.createFlow.moxieAmount;
-  });
-
-  return c.res(createMoxieSend(moxieAmount));
-});
-
-app.transaction('/createmoxiesendtx/:moxieAmount', (c) => {
-  const { frameData, verified, req } = c;
-  const { moxieAmount } = req.param();
-  const fid = frameData.fid;
-
-  const escrowAddress = process.env.ESCROW_ADDRESS as `0x${string}`;
-
-  console.log("inside send tx");
-  console.log("escrowAddress: ", escrowAddress);
-  console.log("moxieAmount: ", moxieAmount);
-
-  return c.contract({
-    abi: escrowAbi,
-    chainId: 'eip155:8453',
-    functionName: 'deposit',
-    args: [fid, moxieAmount],
-    to: escrowAddress,
-    value: BigInt(0)
-  })
-});
-
-app.frame("/createmoxiesendcheck", async (c) => {
-  const { frameData, verified, deriveState } = c;
-  const fid = frameData.fid;
-  const address = frameData.address;
-  // TODO: update this to check for event
-
-  if ((process.env.VERIFY === "true" && !verified) || !fid) {
-    return c.res(notVerified());
-  } 
-
-  let moxieAmount;
-  deriveState((state) => {
-    moxieAmount = state.createFlow.moxieAmount;
-  });
-
-  await checkDeposit(fid);
-
-  const sent = false;
-
-  return c.res(createMoxieSendCheck(sent));
-});
-
-app.frame("/createfinal", async (c) => {
-  const { frameData, verified, buttonValue } = c;
-  const fid = frameData?.fid;
-
-  if ((process.env.VERIFY === "true" && !verified) || !fid) {
-    return c.res(notVerified());
-  }
-
-  // TODO: post game to database
-
-  const gameId = 1;
-  const moxiePrize = 1000;
-
-  const castUrl = `https://warpcast.com/~/compose?text=I'm%20sponsoring%20Rock%20Pepe%20Slizards%20Tournament%20%23${gameId}!%0A%0A${moxiePrize}%20Moxie%20prize%20to%20the%20winner%20💰%0A%0AEasy%20to%20play%20(it's%20just%20rock%20paper%20scissors)%2C%20impossible%20to%20master%20(it's%20all%20luck)%0A%0A🗿%20Rock%20beats%20Slizards%20🦎%0A🐸%20Pepe%20beats%20Rock%20🗿%0A🦎%20Slizards%20beats%20Pepe%20🐸%0A%0AIf%20you%20want%20to%20play%3A%0A1)%20Follow%20%40rps-referee%20-%20this%20bot%20will%20notify%20you%20when%20you%20need%20to%20make%20a%20play%0A2)%20Register%20in%20the%20frame%20below%20-%20first%2032%20to%20register%20get%20to%20play%0A3)%20All%20players%20get%20placed%20into%20a%20bracket%20and%20matched%20up%20against%20opponents%20in%2015%20minute%20matches%20until%20we%20have%20a%20winner%0A%0AMay%20the%20odds%20be%20ever%20in%20your%20favor%20🙏%0A%0A🗿%20🐸%20🦎&embeds[]=https://rps-frame.vercel.app/api/game/${gameId}&channelKey=rockpepeslizards`;
-
-  return c.res(createGameAnnouncement(buttonValue, castUrl));
-});
-
-
-
-
-// app.frame("/created", async (c) => {
-//   const { frameData, verified, deriveState } = c;
-//   const fid = frameData?.fid;
-
-//   if ((process.env.VERIFY === "true" && !verified) || !fid) {
-//     return c.res(notVerified());
-//   }
-
-//   const minutesToStart = 30;
-//   const maxRounds = 5;
-//   const roundLengthMinutes = 15;
-
-//   await createGamePost(minutesToStart, maxRounds, fid, roundLengthMinutes);
-
-//   return c.res(createdGame());
-// });
 
 app.frame("/game/:gameId", (c) => {
   const { gameId } = c.req.param();
@@ -367,7 +189,6 @@ app.frame("/game/:gameId/play", async (c) => {
     }
   } else {
     // game is over
-
     const winnerData = await fetchUserData(gameData.winnerId);
     return c.res(gameOver(gameId, winnerData.profileName));
   }
@@ -438,6 +259,181 @@ app.frame("/game/:gameId/:matchId/played", async (c) => {
   );
 
   return c.res(played(gameId, currentRound.end_time, buttonValue));
+});
+
+// Create tournament routes
+
+app.frame("/create", async (c) => {
+  return c.res(create());
+});
+
+app.frame("/createmoxieamount", async (c) => {
+  const { frameData, verified } = c;
+  const fid = frameData?.fid;
+
+  if ((process.env.VERIFY === "true" && !verified) || !fid) {
+    return c.res(notVerified());
+  } 
+
+  return c.res(createMoxieAmount());
+});
+
+app.frame("/createmoxieapproval", async (c) => {
+  const { frameData, verified, buttonValue, deriveState } = c;
+  const fid = frameData?.fid;
+  const moxieAmount = buttonValue;
+
+  console.log("moxieAmount: ", moxieAmount);
+
+  deriveState((state) => {
+    state.createFlow.moxieAmount = moxieAmount;
+  });
+
+  if ((process.env.VERIFY === "true" && !verified) || !fid) {
+    return c.res(notVerified());
+  } 
+
+  return c.res(createMoxieApproval(moxieAmount));
+});
+
+app.transaction('/createmoxieapprovaltx/:moxieAmount', (c) => {
+  const { frameData, verified, req } = c;
+  const { moxieAmount } = req.param();
+
+  const moxieApprovalAmount = BigInt(moxieAmount);
+  console.log("moxieApprovalAmount: ", moxieApprovalAmount);
+  const moxieAddress = process.env.MOXIE_ADDRESS as `0x${string}`;
+  const spenderAddress = process.env.ESCROW_ADDRESS;
+
+  return c.contract({
+    abi: moxieAbi,
+    chainId: 'eip155:8453',
+    functionName: 'approve',
+    args: [spenderAddress, moxieApprovalAmount],
+    to: moxieAddress,
+    value: BigInt(0)
+  })
+});
+
+app.frame("/createmoxieapprovalcheck", async (c) => {
+  const { frameData, verified, deriveState } = c;
+  const fid = frameData.fid;
+  const address = frameData.address;
+
+  console.log("fid: ", fid);
+  console.log("userAddress: ", address);
+
+  let moxieAmount;
+  deriveState((state) => {
+    moxieAmount = state.createFlow.moxieAmount;
+  });
+
+  console.log("**moxieAmount: ", moxieAmount);
+
+  if ((process.env.VERIFY === "true" && !verified) || !fid) {
+    return c.res(notVerified());
+  } 
+
+  const userAddress = "0x1eF03652a1361A9F965b12bE2d75cd71ed0F5065";
+
+  const allowance = await getMoxieAllowance(userAddress, process.env.ESCROW_ADDRESS);
+  const approved = allowance >= BigInt(moxieAmount);
+  console.log("allowance: ", allowance);
+
+  return c.res(createMoxieApprovalCheck(approved));
+});
+
+app.frame("/createmoxiesend", async (c) => {
+  const { frameData, verified, buttonValue, deriveState } = c;
+  const fid = frameData?.fid;
+
+  if ((process.env.VERIFY === "true" && !verified) || !fid) {
+    return c.res(notVerified());
+  } 
+
+  let moxieAmount;
+  deriveState((state) => {
+    moxieAmount =state.createFlow.moxieAmount;
+  });
+
+  return c.res(createMoxieSend(moxieAmount));
+});
+
+app.transaction('/createmoxiesendtx/:moxieAmount', (c) => {
+  const { frameData, req } = c;
+  const { moxieAmount } = req.param();
+  const fid = frameData.fid;
+
+  const escrowAddress = process.env.ESCROW_ADDRESS as `0x${string}`;
+
+  console.log("/moxiesendtx");
+  console.log("fid: ", fid);
+  console.log("moxieAmount: ", moxieAmount);
+  console.log("escrowAddress: ", escrowAddress);
+
+  return c.contract({
+    abi: escrowAbi,
+    chainId: 'eip155:8453',
+    functionName: 'deposit',
+    args: [fid, moxieAmount],
+    to: escrowAddress,
+    value: BigInt(0)
+  })
+});
+
+app.frame("/createmoxiesendcheck", async (c) => {
+  const { frameData, verified, deriveState } = c;
+  const fid = frameData.fid;
+  const address = frameData.address;
+  // TODO: update this to check for event
+
+  if ((process.env.VERIFY === "true" && !verified) || !fid) {
+    return c.res(notVerified());
+  } 
+
+  // get the deposit event
+  const deposit = await checkDeposit(fid);
+
+  if (!deposit) {
+    return c.res(createMoxieSendCheck(false));
+  }
+
+  deriveState((state) => {
+    state.createFlow.depositId = deposit.depositId;
+  });
+
+  return c.res(createMoxieSendCheck(true));
+});
+
+app.frame("/createfinal", async (c) => {
+  const { frameData, verified, buttonValue, deriveState } = c;
+  const fid = frameData?.fid;
+
+  if ((process.env.VERIFY === "true" && !verified) || !fid) {
+    return c.res(notVerified());
+  }
+
+  let moxieAmount;
+  let depositId;
+  deriveState((state) => {
+    moxieAmount = state.createFlow.moxieAmount;
+    depositId = state.createFlow.depositId;
+  });
+
+  console.log("create final");
+  console.log("moxieAmount: ", moxieAmount);
+  console.log("depositId: ", depositId);
+
+  const moxieAmountDecimals = Number(BigInt(moxieAmount) / BigInt(10 ** 18));
+  const moxieAmountDecimalsString = moxieAmountDecimals.toLocaleString('en-US');
+
+  // TODO: post game to database
+  const gameResponse = await createGamePost(30, 5, fid, moxieAmountDecimals, depositId, 15);
+  console.log("gameResponse: ", gameResponse);
+
+  const castUrl = `https://warpcast.com/~/compose?text=I'm%20sponsoring%20Rock%20Pepe%20Slizards%20Tournament%20%23${gameResponse.gameId}!%0A%0A${moxieAmountDecimalsString}%20Moxie%20prize%20to%20the%20winner%20💰%0A%0AEasy%20to%20play%20(it's%20just%20rock%20paper%20scissors)%2C%20impossible%20to%20master%20(it's%20all%20luck)%0A%0A🗿%20Rock%20beats%20Slizards%20🦎%0A🐸%20Pepe%20beats%20Rock%20🗿%0A🦎%20Slizards%20beats%20Pepe%20🐸%0A%0AIf%20you%20want%20to%20play%3A%0A1)%20Follow%20%40rps-referee%20-%20this%20bot%20will%20notify%20you%20when%20you%20need%20to%20make%20a%20play%0A2)%20Register%20in%20the%20frame%20below%20-%20first%2032%20to%20register%20get%20to%20play%0A3)%20All%20players%20get%20placed%20into%20a%20bracket%20and%20matched%20up%20against%20opponents%20in%2015%20minute%20matches%20until%20we%20have%20a%20winner%0A%0AMay%20the%20odds%20be%20ever%20in%20your%20favor%20🙏%0A%0A🗿%20🐸%20🦎&embeds[]=https://rps-frame.vercel.app/api/game/${gameResponse.gameId}&channelKey=rockpepeslizards`;
+
+  return c.res(createGameAnnouncement(moxieAmountDecimalsString, castUrl, gameResponse.gameId));
 });
 
 devtools(app, { serveStatic });

@@ -29,10 +29,22 @@ export async function checkDeposit(fid: number) {
     const filter = escrowContract.filters.Deposit(null, fid);
     const blockNumber = await provider.getBlockNumber();
     const events = await escrowContract.queryFilter(filter, blockNumber - 100, blockNumber);
-    console.log("events: ", JSON.stringify(events));
-    
-    // TODO: update this
-    return events.length > 0;
+    if (events.length > 0) {
+        const event = events[0];
+        // topics[0] is event signature, topics[1] is depositId, topics[2] is fid
+        const depositId = parseInt(event.topics[1], 16);
+        const fid = parseInt(event.topics[2], 16);
+        // amount is non-indexed, so it's in data
+        const amount = BigInt(event.data);
+        
+        console.log("Deposit event values:", { 
+            depositId, 
+            fid, 
+            amount: amount.toString() // Convert to string for logging
+        });
+        return { depositId, fid, amount };
+    }
+    return null;
 }
 
 
@@ -87,14 +99,14 @@ export async function fetchUserData(fid: number | null) {
     return data;
 }
 
-export async function createGamePost(minutesToStart: number, maxRounds: number, sponsorId: number, roundLengthMinutes: number): Promise<any> {
+export async function createGamePost(minutesToStart: number, maxRounds: number, sponsorId: number, winnerReward: number, depositId: number, roundLengthMinutes: number): Promise<any> {
     const response = await fetch(`${process.env.BACKEND_URL}/api/games/create`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             "x-api-key": process.env.BACKEND_API_KEY || '',
         },
-        body: JSON.stringify({ minutesToStart, maxRounds, sponsorId, roundLengthMinutes }),
+        body: JSON.stringify({ minutesToStart, maxRounds, sponsorId, winnerReward, depositId, roundLengthMinutes }),
     });
 
     if (!response.ok) {
