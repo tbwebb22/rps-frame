@@ -2,14 +2,49 @@ import { getFarcasterUserDetails, FarcasterUserDetailsOutput } from "@airstack/f
 import { GameData, CreateGameStatus } from "../types/types";
 import { ethers } from "ethers";
 import { moxieAbi } from "../abis/moxieAbi";
+import { escrowAbi } from "../abis/escrowAbi";
 
 
 export async function getMoxieAllowance(ownerAddress: string, spendAddress: string) {
+    console.log("getting moxie allowance");
+    console.log("ownerAddress: ", ownerAddress);
+    console.log("spendAddress: ", spendAddress);
     const provider = new ethers.JsonRpcProvider(process.env.BASE_RPC_URL);
-    const contract = new ethers.Contract(process.env.MOXIE_ADDRESS, moxieAbi, provider);
-    const allowance = await contract.allowance(ownerAddress, spendAddress);
+    const moxieContract = new ethers.Contract(process.env.MOXIE_ADDRESS, moxieAbi, provider);
+    const allowance = await moxieContract.allowance(ownerAddress, spendAddress);
 
     return allowance;
+}
+
+export async function checkDeposit(fid: number) {
+    console.log("checking deposit for fid: ", fid);
+    const provider = new ethers.JsonRpcProvider(process.env.BASE_RPC_URL);
+    const escrowContract = new ethers.Contract(
+        process.env.ESCROW_ADDRESS!,
+        escrowAbi,
+        provider
+    );
+    
+    // Get events from last 1000 blocks
+    const filter = escrowContract.filters.Deposit(null, fid);
+    const blockNumber = await provider.getBlockNumber();
+    const events = await escrowContract.queryFilter(filter, blockNumber - 100, blockNumber);
+    if (events.length > 0) {
+        const event = events[0];
+        // topics[0] is event signature, topics[1] is depositId, topics[2] is fid
+        const depositId = parseInt(event.topics[1], 16);
+        const fid = parseInt(event.topics[2], 16);
+        // amount is non-indexed, so it's in data
+        const amount = BigInt(event.data);
+        
+        console.log("Deposit event values:", { 
+            depositId, 
+            fid, 
+            amount: amount.toString() // Convert to string for logging
+        });
+        return { depositId, fid, amount };
+    }
+    return null;
 }
 
 
@@ -64,14 +99,14 @@ export async function fetchUserData(fid: number | null) {
     return data;
 }
 
-export async function createGamePost(minutesToStart: number, maxRounds: number, sponsorId: number, roundLengthMinutes: number): Promise<any> {
+export async function createGamePost(minutesToStart: number, maxRounds: number, sponsorId: number, winnerReward: number, depositId: number, roundLengthMinutes: number): Promise<any> {
     const response = await fetch(`${process.env.BACKEND_URL}/api/games/create`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             "x-api-key": process.env.BACKEND_API_KEY || '',
         },
-        body: JSON.stringify({ minutesToStart, maxRounds, sponsorId, roundLengthMinutes }),
+        body: JSON.stringify({ minutesToStart, maxRounds, sponsorId, winnerReward, depositId, roundLengthMinutes }),
     });
 
     if (!response.ok) {

@@ -1,13 +1,13 @@
 /* eslint-disable react/jsx-key */
 /** @jsxImportSource @airstack/frog/jsx */
-import { Button, Frog, TextInput } from "@airstack/frog";
+import { Button } from "@airstack/frog";
 
 const backgroundColor = "#16101e";
 const fontColor = "#c282ff";
 
-export const createGameStart = () => {
+export const create = () => {
   return {
-    action: `/createmoxie`,
+    action: `/createmoxieamount`,
     image: (
       <div
         style={{
@@ -24,6 +24,9 @@ export const createGameStart = () => {
         }}
       >
         <HeroImage />
+        <div style={{ fontSize: 50, marginTop: 40 }}>
+          Tournament Launcher
+        </div>
       </div>
     ),
     intents: [<Button>Launch Tournament</Button>],
@@ -31,9 +34,9 @@ export const createGameStart = () => {
   };
 };
 
-export const createGameMoxieAmount = () => {
+export const createMoxieAmount = () => {
   return {
-    action: `/createfinal`,
+    action: `/createmoxieapproval`,
     image: (
       <div
         style={{
@@ -51,56 +54,23 @@ export const createGameMoxieAmount = () => {
       >
         <HeroImage />
         <div style={{ fontSize: 40, marginTop: 10 }}>
-          Enter Moxie sponsorship amount
+          Select winner prize amount
         </div>
       </div>
     ),
     intents: [
-      <Button value="1000">1,000 Moxie</Button>,
-      <Button value="2500">2,500 Moxie</Button>,
-      <Button value="5000">5,000 Moxie</Button>,
-      <Button value="10000">10,000 Moxie</Button>,
+      <Button value="1000000000000000000000">1,000 Moxie</Button>,
+      <Button value="2500000000000000000000">2,500 Moxie</Button>,
+      <Button value="5000000000000000000000">5,000 Moxie</Button>,
+      <Button value="10000000000000000000000">10,000 Moxie</Button>,
     ],
     title: `Rock Pepe Slizards`,
   };
 };
 
-export const approveMoxie = () => {
-  return {
-    action: `/approvedmoxie`,
-    image: (
-      <div
-        style={{
-          fontFamily: "Anton",
-          backgroundColor,
-          color: fontColor,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          fontSize: 60,
-          width: "100%",
-          height: "100%",
-          boxSizing: "border-box",
-        }}
-      >
-        <HeroImage />
-        <div style={{ fontSize: 40, marginTop: 10 }}>
-          Enter Moxie sponsorship amount
-        </div>
-      </div>
-    ),
-    intents: [
-      <Button.Transaction target="/approvemoxietx">
-        Approve Moxie
-      </Button.Transaction>,
-    ],
-    title: `Rock Pepe Slizards`,
-  };
-};
-
-export const approvedMoxie = (transactionId: string) => {
+export const createMoxieApproval = (moxieAmount: string) => {
     return {
-      action: `/createfinal`,
+      action: `/createmoxieapprovalcheck`,
       image: (
         <div
           style={{
@@ -118,17 +88,105 @@ export const approvedMoxie = (transactionId: string) => {
         >
           <HeroImage />
           <div style={{ fontSize: 40, marginTop: 10 }}>
-            Approved Moxie! Transaction ID:
-          </div>
-          <div style={{ fontSize: 10, marginTop: 10 }}>
-            {transactionId}
+            Approve Moxie transfer
           </div>
         </div>
       ),
       intents: [
-        <Button.Transaction target="/sendmoxietx">
-        Send Moxie
-      </Button.Transaction>,
+        <Button.Transaction target={`/createmoxieapprovaltx/${moxieAmount}`}>Approve</Button.Transaction>,
+      ],
+      title: `Rock Pepe Slizards`,
+    };
+  };
+
+  export const createMoxieApprovalCheck = (approved: boolean) => {
+    return {
+      action: approved ? `/createmoxiesend` : `/createmoxieapprovalcheck`,
+      image: (
+        <div
+          style={{
+            fontFamily: "Anton",
+            backgroundColor,
+            color: fontColor,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            fontSize: 60,
+            width: "100%",
+            height: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          <HeroImage />
+          <div style={{ fontSize: 40, marginTop: 10 }}>
+            {approved ? "Approval succeeded!" : "Submitting transaction..."}
+          </div>
+        </div>
+      ),
+      intents: [
+        <Button value="1000">{approved ? "Next" : "Check status"}</Button>,
+      ],
+      title: `Rock Pepe Slizards`,
+    };
+  };
+
+  export const createMoxieSend = (moxieAmount: string) => {
+    return {
+      action: `/createmoxiesendcheck`,
+      image: (
+        <div
+          style={{
+            fontFamily: "Anton",
+            backgroundColor,
+            color: fontColor,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            fontSize: 60,
+            width: "100%",
+            height: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          <HeroImage />
+          <div style={{ fontSize: 40, marginTop: 10 }}>
+            Deposit reward Moxie
+          </div>
+        </div>
+      ),
+      intents: [
+        <Button.Transaction target={`/createmoxiesendtx/${moxieAmount}`}>Send Moxie</Button.Transaction>,
+      ],
+      title: `Rock Pepe Slizards`,
+    };
+  };
+
+  export const createMoxieSendCheck = (sent: boolean) => {
+    return {
+      action: sent ? `/createfinal` : `/createmoxiesendcheck`,
+      image: (
+        <div
+          style={{
+            fontFamily: "Anton",
+            backgroundColor,
+            color: fontColor,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            fontSize: 60,
+            width: "100%",
+            height: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          <HeroImage />
+          <div style={{ fontSize: 40, marginTop: 10 }}>
+            Submitting transaction...
+          </div>
+        </div>
+      ),
+      intents: [
+        <Button value="1000">Check status</Button>,
       ],
       title: `Rock Pepe Slizards`,
     };
@@ -136,7 +194,8 @@ export const approvedMoxie = (transactionId: string) => {
 
 export const createGameAnnouncement = (
   moxieAmount: string,
-  castUrl: string
+  castUrl: string,
+  gameId: number
 ) => {
   return {
     image: (
@@ -156,7 +215,10 @@ export const createGameAnnouncement = (
       >
         <HeroImage />
         <div style={{ fontSize: 40, marginTop: 10 }}>
-          {`${moxieAmount} Moxie sponsorship!`}
+          {`Created tournament #${gameId}`}
+        </div>
+        <div style={{ fontSize: 40, marginTop: 0 }}>
+          {`with ${moxieAmount} Moxie prize 💰`}
         </div>
         <div style={{ fontSize: 40, marginTop: 10 }}>
           Announce the tournament below!
@@ -167,57 +229,6 @@ export const createGameAnnouncement = (
     title: `Rock Pepe Slizards`,
   };
 };
-
-// export const createGameStatus = (
-//   canLaunch: boolean,
-//   minutesUntilStart: number
-// ) => {
-//   return {
-//     action: `/created`,
-//     image: (
-//       <div
-//         style={{
-//           fontFamily: "Anton",
-//           backgroundColor,
-//           color: fontColor,
-//           display: "flex",
-//           flexDirection: "column",
-//           alignItems: "center",
-//           fontSize: 60,
-//           width: "100%",
-//           height: "100%",
-//           boxSizing: "border-box",
-//         }}
-//       >
-//         <HeroImage />
-//         {canLaunch ? (
-//           <>
-//             <div style={{ fontSize: 40, marginTop: 10 }}>
-//               Registration will start immediately
-//             </div>
-//             <div style={{ fontSize: 40, marginTop: 10 }}>
-//               Round 1 will start in ~30 minutes
-//             </div>
-//             <div style={{ fontSize: 40, marginTop: 10 }}>
-//               Launch tournament below!
-//             </div>
-//           </>
-//         ) : (
-//             <>
-//             <div style={{ fontSize: 40, marginTop: 10 }}>
-//               Another tournament was recently launched
-//             </div>
-//             <div style={{ fontSize: 40, marginTop: 10 }}>
-//               {`Please launch tournament in ${minutesUntilStart} minutes`}
-//             </div>
-//           </>
-//         )}
-//       </div>
-//     ),
-//     intents: [<Button>Launch Tournament</Button>],
-//     title: `Rock Pepe Slizards`,
-//   };
-// };
 
 export const createdGame = () => {
   return {
@@ -443,47 +454,47 @@ export const registrationNotStarted = () => {
   };
 };
 
-export const registrationFull = () => {
-  return {
-    image: (
-      <div
-        style={{
-          fontFamily: "Anton",
-          backgroundColor,
-          color: fontColor,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          fontSize: 60,
-          width: "100%",
-          height: "100%",
-          boxSizing: "border-box",
-        }}
-      >
-        <HeroImage />
-        <div
-          style={{
-            display: "flex",
-            fontSize: 30,
-            marginTop: 50,
-          }}
-        >
-          Registration is full
-        </div>
-        <div
-          style={{
-            display: "flex",
-            fontSize: 30,
-            marginTop: 10,
-          }}
-        >
-          Please come back for the next game! 🙏
-        </div>
-      </div>
-    ),
-    title: `Rock Pepe Slizards`,
-  };
-};
+// export const registrationFull = () => {
+//   return {
+//     image: (
+//       <div
+//         style={{
+//           fontFamily: "Anton",
+//           backgroundColor,
+//           color: fontColor,
+//           display: "flex",
+//           flexDirection: "column",
+//           alignItems: "center",
+//           fontSize: 60,
+//           width: "100%",
+//           height: "100%",
+//           boxSizing: "border-box",
+//         }}
+//       >
+//         <HeroImage />
+//         <div
+//           style={{
+//             display: "flex",
+//             fontSize: 30,
+//             marginTop: 50,
+//           }}
+//         >
+//           Registration is full
+//         </div>
+//         <div
+//           style={{
+//             display: "flex",
+//             fontSize: 30,
+//             marginTop: 10,
+//           }}
+//         >
+//           Please come back for the next game! 🙏
+//         </div>
+//       </div>
+//     ),
+//     title: `Rock Pepe Slizards`,
+//   };
+// };
 
 export const register = (gameId: string, userName: string) => {
   return {
