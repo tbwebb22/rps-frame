@@ -32,6 +32,7 @@ export interface GameData {
     userRegistered: boolean;
     rounds: Round[];
     winnerId: number | null;
+    castHash: string | null;
 }
 
 export interface CreateGameStatus {

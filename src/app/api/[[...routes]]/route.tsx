@@ -44,6 +44,7 @@ import {
 } from "../../frames/frames";
 import { GameData } from "../../../types/types";
 import { getMoxieAllowance } from "../../../utils/api";
+import { likedAndRecasted } from "../../../utils/neynar";
 
 type State = {
   game: GameData | null;
@@ -206,6 +207,10 @@ app.frame("/game/:gameId/registered", async (c) => {
   deriveState((state) => {
     game = state.game;
   });
+
+  if (process.env.REQUIRE_LIKE_RECAST === "true" && !await likedAndRecasted(game.castHash, fid)) {
+    return c.error(new Error("Please like and recast to register"));
+  }
 
   await registerUserForGame(fid, Number(gameId));
   return c.res(registered(gameId, game.gameStart));
