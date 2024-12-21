@@ -27,7 +27,6 @@ export interface GameData {
     gameState: 0 | 1 | 2 | 3;
     registrationStart: string;
     gameStart: string;
-    maxRegistrations: number;
     currentRegistrations: number;
     userRegistered: boolean;
     rounds: Round[];

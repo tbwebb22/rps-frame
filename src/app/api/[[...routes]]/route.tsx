@@ -24,7 +24,6 @@ import {
   register,
   roundOne,
   registered,
-  registrationFull,
   selectPlay,
   registrationNotStarted,
   lost,
@@ -125,9 +124,6 @@ app.frame("/game/:gameId/play", async (c) => {
     if (gameData.userRegistered) {
       // user is already registered
       return c.res(registered(gameId, gameData.gameStart));
-    } else if (gameData.currentRegistrations >= gameData.maxRegistrations) {
-      // registration is full
-      return c.res(registrationFull());
     } else {
       // user is not registered
       return c.res(register(gameId, gameData.userName));
@@ -208,7 +204,7 @@ app.frame("/game/:gameId/registered", async (c) => {
     game = state.game;
   });
 
-  if (process.env.REQUIRE_LIKE_RECAST === "true" && !await likedAndRecasted(game.castHash, fid)) {
+  if (!await likedAndRecasted(game.castHash, fid) && process.env.REQUIRE_LIKE_RECAST === "true") {
     return c.error(new Error("Please like and recast to register"));
   }
 
@@ -302,7 +298,7 @@ app.frame("/createmoxieapproval", async (c) => {
 });
 
 app.transaction('/createmoxieapprovaltx/:moxieAmount', (c) => {
-  const { frameData, verified, req } = c;
+  const { req } = c;
   const { moxieAmount } = req.param();
 
   const moxieApprovalAmount = BigInt(moxieAmount);
@@ -323,10 +319,10 @@ app.transaction('/createmoxieapprovaltx/:moxieAmount', (c) => {
 app.frame("/createmoxieapprovalcheck", async (c) => {
   const { frameData, verified, deriveState } = c;
   const fid = frameData.fid;
-  const address = frameData.address;
+  const userAddress = frameData.address;
 
   console.log("fid: ", fid);
-  console.log("userAddress: ", address);
+  console.log("frameData.address: ", userAddress);
 
   let moxieAmount;
   deriveState((state) => {
@@ -339,7 +335,7 @@ app.frame("/createmoxieapprovalcheck", async (c) => {
     return c.res(notVerified());
   } 
 
-  const userAddress = "0x1eF03652a1361A9F965b12bE2d75cd71ed0F5065";
+  // const userAddress = "0x1eF03652a1361A9F965b12bE2d75cd71ed0F5065";
 
   const allowance = await getMoxieAllowance(userAddress, process.env.ESCROW_ADDRESS);
   const approved = allowance >= BigInt(moxieAmount);
@@ -349,7 +345,7 @@ app.frame("/createmoxieapprovalcheck", async (c) => {
 });
 
 app.frame("/createmoxiesend", async (c) => {
-  const { frameData, verified, buttonValue, deriveState } = c;
+  const { frameData, verified, deriveState } = c;
   const fid = frameData?.fid;
 
   if ((process.env.VERIFY === "true" && !verified) || !fid) {
@@ -358,7 +354,7 @@ app.frame("/createmoxiesend", async (c) => {
 
   let moxieAmount;
   deriveState((state) => {
-    moxieAmount =state.createFlow.moxieAmount;
+    moxieAmount = state.createFlow.moxieAmount;
   });
 
   return c.res(createMoxieSend(moxieAmount));

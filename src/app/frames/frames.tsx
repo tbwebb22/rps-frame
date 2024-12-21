@@ -454,47 +454,47 @@ export const registrationNotStarted = () => {
   };
 };
 
-export const registrationFull = () => {
-  return {
-    image: (
-      <div
-        style={{
-          fontFamily: "Anton",
-          backgroundColor,
-          color: fontColor,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          fontSize: 60,
-          width: "100%",
-          height: "100%",
-          boxSizing: "border-box",
-        }}
-      >
-        <HeroImage />
-        <div
-          style={{
-            display: "flex",
-            fontSize: 30,
-            marginTop: 50,
-          }}
-        >
-          Registration is full
-        </div>
-        <div
-          style={{
-            display: "flex",
-            fontSize: 30,
-            marginTop: 10,
-          }}
-        >
-          Please come back for the next game! 🙏
-        </div>
-      </div>
-    ),
-    title: `Rock Pepe Slizards`,
-  };
-};
+// export const registrationFull = () => {
+//   return {
+//     image: (
+//       <div
+//         style={{
+//           fontFamily: "Anton",
+//           backgroundColor,
+//           color: fontColor,
+//           display: "flex",
+//           flexDirection: "column",
+//           alignItems: "center",
+//           fontSize: 60,
+//           width: "100%",
+//           height: "100%",
+//           boxSizing: "border-box",
+//         }}
+//       >
+//         <HeroImage />
+//         <div
+//           style={{
+//             display: "flex",
+//             fontSize: 30,
+//             marginTop: 50,
+//           }}
+//         >
+//           Registration is full
+//         </div>
+//         <div
+//           style={{
+//             display: "flex",
+//             fontSize: 30,
+//             marginTop: 10,
+//           }}
+//         >
+//           Please come back for the next game! 🙏
+//         </div>
+//       </div>
+//     ),
+//     title: `Rock Pepe Slizards`,
+//   };
+// };
 
 export const register = (gameId: string, userName: string) => {
   return {
