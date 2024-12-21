@@ -100,6 +100,7 @@ export const createMoxieApproval = (moxieAmount: string) => {
   };
 
   export const createMoxieApprovalCheck = (approved: boolean) => {
+    console.log("approved: ", approved);
     return {
       action: approved ? `/createmoxiesend` : `/createmoxieapprovalcheck`,
       image: (
