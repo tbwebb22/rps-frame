@@ -51,6 +51,7 @@ type State = {
 };
 
 type CreateFlowState = {
+  userAddress: string;
   moxieAmount: string;
   depositId: number;
 }
@@ -72,6 +73,7 @@ const app = new Frog<{ State: State }>({
   initialState: {
     game: null,
     createFlow: {
+      userAddress: "0x",
       moxieAmount: "0",
       depositId: null,
     },
@@ -319,23 +321,28 @@ app.transaction('/createmoxieapprovaltx/:moxieAmount', (c) => {
 app.frame("/createmoxieapprovalcheck", async (c) => {
   const { frameData, verified, deriveState } = c;
   const fid = frameData.fid;
-  const userAddress = frameData.address;
-
-  console.log("fid: ", fid);
-  console.log("frameData.address: ", userAddress);
-
-  let moxieAmount;
-  deriveState((state) => {
-    moxieAmount = state.createFlow.moxieAmount;
-  });
-
-  console.log("**moxieAmount: ", moxieAmount);
 
   if ((process.env.VERIFY === "true" && !verified) || !fid) {
     return c.res(notVerified());
   } 
 
-  // const userAddress = "0x1eF03652a1361A9F965b12bE2d75cd71ed0F5065";
+  console.log("fid: ", fid);
+  console.log("frameData.address: ", frameData.address);
+
+  let moxieAmount;
+  let userAddress;
+  deriveState((state) => {
+    moxieAmount = state.createFlow.moxieAmount;
+    if (frameData.address !== "0x") {
+      state.createFlow.userAddress = frameData.address;
+      userAddress = frameData.address;
+    } else {
+      userAddress = state.createFlow.userAddress;
+    }
+  });
+
+  console.log("moxieAmount: ", moxieAmount);
+  console.log("userAddress: ", userAddress);
 
   const allowance = await getMoxieAllowance(userAddress, process.env.ESCROW_ADDRESS);
   const approved = allowance >= BigInt(moxieAmount);
@@ -386,7 +393,7 @@ app.transaction('/createmoxiesendtx/:moxieAmount', (c) => {
 app.frame("/createmoxiesendcheck", async (c) => {
   const { frameData, verified, deriveState } = c;
   const fid = frameData.fid;
-  const address = frameData.address;
+
   // TODO: update this to check for event
 
   if ((process.env.VERIFY === "true" && !verified) || !fid) {
