@@ -340,6 +340,7 @@ app.frame("/createmoxieapprovalcheck", async (c) => {
   const allowance = await getMoxieAllowance(userAddress, process.env.ESCROW_ADDRESS);
   const approved = allowance >= BigInt(moxieAmount);
   console.log("allowance: ", allowance);
+  console.log("moxieAmount: ", BigInt(moxieAmount));
 
   return c.res(createMoxieApprovalCheck(approved));
 });
