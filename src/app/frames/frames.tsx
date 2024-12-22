@@ -54,15 +54,15 @@ export const createMoxieAmount = () => {
       >
         <HeroImage />
         <div style={{ fontSize: 40, marginTop: 10 }}>
-          Select winner prize amount
+          Select Moxie prize amount
         </div>
       </div>
     ),
     intents: [
-      <Button value="1000000000000000000000">1,000 Moxie</Button>,
-      <Button value="2500000000000000000000">2,500 Moxie</Button>,
-      <Button value="5000000000000000000000">5,000 Moxie</Button>,
-      <Button value="10000000000000000000000">10,000 Moxie</Button>,
+      <Button value="1000000000000000000000">1,000</Button>,
+      <Button value="2500000000000000000000">2,500</Button>,
+      <Button value="5000000000000000000000">5,000</Button>,
+      <Button value="10000000000000000000000">10,000</Button>,
     ],
     title: `Rock Pepe Slizards`,
   };
